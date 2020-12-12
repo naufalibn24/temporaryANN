@@ -21,9 +21,9 @@ access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmM4NDk5YzNiMmM1M
 
 
 ### Tournament Rules
-POST http://localhost:5000/comittee/createRules/5fd0b0291ad02c425044c659
+POST http://localhost:5000/comittee/createRules/5fd472da5f74512354243679
 Content-Type: application/json
-access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQwYjAyOTFhZDAyYzQyNTA0NGM2NTkiLCJpYXQiOjE2MDc1NDI0NDJ9.8xE1TpuYdyvdESBddJ5sPAqG4ehuxsfRu76Da_atBcY
+access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQ0NzJkYTVmNzQ1MTIzNTQyNDM2NzkiLCJpYXQiOjE2MDc3NjIzOTd9.Qg3e1sGDLRMQznNCvIRFrqBqagbD01axXSq0JeOMyQY
 
 {
     "age":23,
@@ -35,9 +35,9 @@ access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQwYjAyOTFhZDAyY
 
 
 ### Create Tournament
-POST http://localhost:5000/comittee/createGame/5fd0b0291ad02c425044c659
+POST http://localhost:5000/comittee/createGame
 Content-Type: application/json
-access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQwYjAyOTFhZDAyYzQyNTA0NGM2NTkiLCJpYXQiOjE2MDc1NDI0NDJ9.8xE1TpuYdyvdESBddJ5sPAqG4ehuxsfRu76Da_atBcY
+access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQ0NzJkYTVmNzQ1MTIzNTQyNDM2NzkiLCJpYXQiOjE2MDc3NjIzOTd9.Qg3e1sGDLRMQznNCvIRFrqBqagbD01axXSq0JeOMyQY
 
 {
     "tournamentName":"csgo",
@@ -65,7 +65,7 @@ access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQwYjAyOTFhZDAyY
 ### APPROVE group AUTOMATICALLY through inbox
 PUT http://localhost:5000/comittee/approve/5fd0b0291ad02c425044c659
 Content-Type: application/json
-access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQwYjAyOTFhZDAyYzQyNTA0NGM2NTkiLCJpYXQiOjE2MDc1NDI0NDJ9.8xE1TpuYdyvdESBddJ5sPAqG4ehuxsfRu76Da_atBcY
+access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQ0NzJkYTVmNzQ1MTIzNTQyNDM2NzkiLCJpYXQiOjE2MDc3NjIzOTd9.Qg3e1sGDLRMQznNCvIRFrqBqagbD01axXSq0JeOMyQY
 
 {
     "participant":[
@@ -79,15 +79,15 @@ access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQwYjAyOTFhZDAyY
 
 
 ### APPROVE user AUTOMATICALLY through inbox
-PUT http://localhost:5000/comittee/approve/5fd0b0291ad02c425044c659
+PUT http://localhost:5000/comittee/approve/5fd472da5f74512354243679
 Content-Type: application/json
-access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQwYjAyOTFhZDAyYzQyNTA0NGM2NTkiLCJpYXQiOjE2MDc1NDI0NDJ9.8xE1TpuYdyvdESBddJ5sPAqG4ehuxsfRu76Da_atBcY
+access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQ0NzJkYTVmNzQ1MTIzNTQyNDM2NzkiLCJpYXQiOjE2MDc3NjQyNjZ9.biwohMjoapabpGYppVUPptbW5MU_4ZZlTWeWJAGYFs8
 
 {
     "participant":[
         {
-        "_userId":"5fd1941ad95e6f444c0148dc"  
+        "_userId":"5fd45b07d6ad681a84e41014"  
         }
     ],
-    "_tournamentId":"5fd3abe80db961494422a610"
+    "_tournamentId":"5fd482369ef87537ec419427"
 }

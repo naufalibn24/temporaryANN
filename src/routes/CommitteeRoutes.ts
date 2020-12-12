@@ -24,7 +24,7 @@ router.post(
 //   CommitteeController.createTournament
 // );
 router.post(
-  "/createGame/:id",
+  "/createGame",
   authorization.comittee,
   CommitteeController.createTournament
 );

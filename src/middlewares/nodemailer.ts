@@ -13,11 +13,11 @@ class SMTPemail {
         pass: process.env.Password,
       },
     });
-    var jwtSecret: any = process.env.JWT_Activate;
+    const jwtSecret: any = process.env.JWT_Activate;
+    const payload: any = { username: req.body.username, email: req.body.email }
+    console.log(payload);
     const verifyingToken = jwt.sign(
-      {
-        username: req.bodyusername,
-      },
+      payload,
       jwtSecret
     );
 
@@ -41,9 +41,8 @@ class SMTPemail {
       } else {
         res.status(201).json({
           success: true,
-          message: `Only one few step, a Verification code sent to ${
-            req.body.email
-          } on ${Date()}`,
+          message: `Only one few step, a Verification code sent to ${req.body.email
+            } on ${Date()}`,
           data: {
             username: req.body.username,
             email: req.body.email,

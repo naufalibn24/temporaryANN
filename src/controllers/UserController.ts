@@ -1,9 +1,15 @@
 import jwt from "jsonwebtoken";
 import bcrypt, { hash } from "bcrypt";
-// const bcrypt = require("bcrypt");
 import User from "../models/UserModel";
 import UserProfile from "../models/User_ProfileModel";
-import _ from "lodash";
+import _, { identity } from "lodash";
+import console from "console";
+import Tournament from "../models/TournamentModel";
+import TournamentRules from "../models/TournamentRulesModel";
+
+import ItournamentRules from "../models/interfaces/TournamentRulesInterface";
+import TournamentReport from "../models/TournamentReportModel";
+import { report } from "process";
 require("dotenv").config();
 
 class UserController {
@@ -35,37 +41,25 @@ class UserController {
       username,
       password,
       verifyingToken,
-      birthDate,
-      subDistrict,
-      phoneNumber,
-      fullname,
     } = req.body;
     const Check: any = await User.findOne({ $or: [{ email }, { username }] });
-    const Pass: any = bcrypt.compare(password, Check?.password);
+    const Pass: any = await bcrypt.compare(password, Check?.password);
     const Profile: any = await UserProfile.findOne({ _userId: Check._id });
-
-    if ((await Check) && (await Pass)) {
-      if (Profile) {
-        next();
-        // res.send("to next atas");
-      } else {
+    if ((Check) && (Pass)) {
+      if (Check.role === "unregistered") {
+        console.log(Check.role)
         const secret: any = process.env.JWT_Activate;
-        jwt.verify(verifyingToken, secret, (err, decoded) => {
-          if (err) {
-            next({ name: "INVALID_TOKEN" });
-          } else {
-            const profile = new UserProfile({
-              _userId: Check._id,
-              birthDate,
-              subDistrict,
-              phoneNumber,
-              fullname,
-            });
-            profile.save();
-            next();
-            // res.send("updated and next");
+        await jwt.verify(verifyingToken, secret, (err, decoded) => {
+          if (decoded.email == email || decoded.username == username) {
+            next()
           }
-        });
+          else {
+            next({ name: "INVALID_TOKEN" })
+          }
+        })
+      }
+      else {
+        next()
       }
     } else {
       next({ name: "NOT_FOUND" });
@@ -77,19 +71,19 @@ class UserController {
     const Found: any = await User.findOne({ $or: [{ email }, { username }] });
     const secret_key: any = process.env.JWT_Accesstoken;
     const access_token: any = jwt.sign({ _id: Found._id }, secret_key);
-    const Res = res.status(201).json({
+    const response = res.status(201).json({
       success: true,
       message: `${username || email} has successfully login`,
       access_token,
     });
-    if (Found.role == "unregistered") {
+    if (Found.role === "unregistered") {
       await User.findOneAndUpdate(
         { $or: [{ email }, { username }] },
         { $set: { role: "user" } }
-      );
-      Res;
+      )
+      return response
     } else {
-      Res;
+      response
     }
   }
 
@@ -108,6 +102,7 @@ class UserController {
     if (resetLink) {
       const jwtforgottoken: any = process.env.JWT_ForgotPassword;
       jwt.verify(resetLink, jwtforgottoken, function (error, decodedData) {
+        console.log(decodedData)
         if (error) {
           throw { name: "INVALID_TOKEN" };
         } else {
@@ -144,24 +139,100 @@ class UserController {
     } else throw { name: "INVALID_TOKEN" };
   }
 
-  static tournamentAvailable(req, res, next) {
+  static async tournamentAvailable(req, res, next) {
     // const data= await TournamentReport.find ({_tournamentId,stageName:'participantList'})
     // const tournament= await Tournament.findOne ({_tournamentId})
     // const rules= await TournamentRules.findOne ({tournament._tournamentRulesId})
     // if(rules.maxParticipant >= data.participant.length )
+    const tournament: any = await Tournament.find().exec()
+    const newTournament = await tournament.map(async (tournaments, index) => {
+      const rules = await TournamentRules.findOne({ _id: tournaments._tournamentRulesId }).exec()
+      return { "id": tournaments._id, "rules": rules?.maxParticipant }
+    })
+
+    Promise.all(newTournament).then(results => {
+
+      const data = results.map(async (data: any, index) => {
+        const _id = data.id
+        const report = await TournamentReport.findOne({ _tournamentId: data.id })
+        const participant: any = report?.participant
+        console.log(data.rules, participant.length)
+        const tourn = await Tournament.findOne({ _id: data.id })
+
+
+        if (data.rules <= participant.length) {
+          return { status: 1, message: "tidak tersedia", data: tourn }
+
+        }
+        else {
+          return { status: 0, message: "tersedia", data: tourn }
+        }
+      })
+
+      Promise.all(data).then(result => {
+        res.status(200).send(result)
+      })
+    })
+
+
   }
 
-  static seeTournamentList(req, res, next) {
+  static async seeTournamentList(req, res, next) {
     // pagination
     // search pake regex
     // const tournament= await Tournament.find()
     // res.json({ tournament})
+    const { page = 1, limit = 5, q = '' } = req.query
+    try {
+      const tournament: any = await Tournament.find({ tournamentName: { '$regex': q, '$options': 'i' } })
+        .limit(limit * 1)
+        .skip((page - 1) * limit)
+        .exec()
+      const nextpage = parseInt(page) + parseInt("1")
+      const previouspage = parseInt(page) - parseInt("1")
+      const jumlahData = await Tournament.countDocuments({ tournamentName: { '$regex': q, '$options': 'i' } })
+      const jumlahpage = Math.ceil(jumlahData / limit)
+      console.log(jumlahpage)
+      var npg, ppg
+      if (parseInt(page) === jumlahpage && parseInt(page) === 1) {
+        npg = null
+        ppg = null
+      } else if (parseInt(page) === (jumlahpage)) {
+        ppg = 'http://localhost:5000/tournaments?page=' + previouspage
+        npg = null
+      }
+      else if (parseInt(page) === 1) {
+        npg = 'http://localhost:5000/tournaments?page=' + nextpage
+        ppg = null
+      } else {
+        npg = 'http://localhost:5000/tournaments?page=' + nextpage
+        ppg = 'http://localhost:5000/tournaments?page=' + previouspage
+      }
+      res.status(200).send({
+        tournament,
+        page: page,
+        totalPage: jumlahpage,
+        nexpages: npg,
+        previousPage: ppg
+      })
+    } catch (error) {
+      console.error(error.message)
+    }
   }
 
-  static seeTournamentDetail(req, res, next) {
-    // const tournament= await Tournament.findbyid(_id)
-    // const tournamentrules =await TournamentRules.findbyid(tournament._tournamentRulesId)
-    // res.json({ tournament, tournamentrules})
+  static async seeTournamentDetail(req, res, next) {
+    const { id } = req.params
+    const tournament = await Tournament.findById(id)
+    const participant = await TournamentReport.findOne({
+      _tournamentId: id,
+    })
+    const part: any = participant?.participant.length
+    const rules = await TournamentRules.findOne({
+      _id: tournament?._tournamentRulesId,
+    })
+    const max: any = rules?.maxParticipant
+    const booked = parseInt(part) + "/" + parseInt(max)
+    res.status(200).send({ StartDate: tournament?.tournamentOpen, EndDate: tournament?.tournamentClose, participant: participant?.participant, by: rules?.subdistrict, maximumage: rules?.age, slot: booked })
   }
 
   static seeHallOfFame(req, res, next) {
