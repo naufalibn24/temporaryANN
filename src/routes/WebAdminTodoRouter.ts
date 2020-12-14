@@ -5,8 +5,5 @@ import authorization from "../middlewares/authorization";
 
 const router = Router();
 
-router.put("/assign", authentication, authorization.allowifloggedin, authorization.grantacsess("updateOwn", "assign"),
-WebAdminController.assign
-);
-
+router.put("/assign", authorization.admin, WebAdminController.assign);
 export default router;

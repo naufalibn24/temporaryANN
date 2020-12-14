@@ -82,6 +82,17 @@ access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQxMDU1NTI0OWExZ
 
 
 
+### DELETE group
+DELETE http://localhost:5000/user/demolishGroup/5fd10555249a1e08745312c6
+Content-Type: application/json
+access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQxMDU1NTI0OWExZTA4NzQ1MzEyYzYiLCJpYXQiOjE2MDc1NzMzNzZ9.CA57QwuPNwhuVc6864xbRxfwwJBoSfynmIot4DI4G9U
+
+{
+      "_id":"5fd5984cadd4e049543cf761"
+}
+
+
+
 
 ### RECRUIT group
 PUT http://localhost:5000/user/groupRecruit/5fd10555249a1e08745312c6
@@ -99,6 +110,7 @@ access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQxMDU1NTI0OWExZ
 
 
 ### KICK group
+<<<<<<< HEAD
 PUT http://localhost:5000/user/groupKick/5fd10555249a1e08745312c6
 Content-Type: application/json
 access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQxMDU1NTI0OWExZTA4NzQ1MzEyYzYiLCJpYXQiOjE2MDc1NzMzNzZ9.CA57QwuPNwhuVc6864xbRxfwwJBoSfynmIot4DI4G9U
@@ -110,3 +122,16 @@ access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQxMDU1NTI0OWExZ
 ### HALL of FAME
 GET http://localhost:5000/hallOfFame
 Content-Type: application/json
+=======
+PUT http://localhost:5000/user/groupRecruit/5fd10555249a1e08745312c6
+Content-Type: application/json
+access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQxMDU1NTI0OWExZTA4NzQ1MzEyYzYiLCJpYXQiOjE2MDc1NzMzNzZ9.CA57QwuPNwhuVc6864xbRxfwwJBoSfynmIot4DI4G9U
+
+{   
+      "member":[
+          {
+              "_userId":"5fd19319d95e6f444c0148d7"
+        }
+      ]  
+}
+>>>>>>> 890e203

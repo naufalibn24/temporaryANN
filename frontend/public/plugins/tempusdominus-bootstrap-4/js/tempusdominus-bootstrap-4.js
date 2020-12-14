@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*@preserve
  * Tempus Dominus Bootstrap4 v5.1.2 (https://tempusdominus.github.io/bootstrap-4/)
  * Copyright 2016-2018 Jonathan Peterson
@@ -27,6 +28,69 @@ if ((version[0] <= 2 && version[1] < 17) || (version[0] >= 3)) {
 
 +function () {
 
+=======
+<<<<<<< Updated upstream
+/*@preserve
+ * Tempus Dominus Bootstrap4 v5.1.2 (https://tempusdominus.github.io/bootstrap-4/)
+ * Copyright 2016-2018 Jonathan Peterson
+ * Licensed under MIT (https://github.com/tempusdominus/bootstrap-3/blob/master/LICENSE)
+ */
+
+if (typeof jQuery === 'undefined') {
+  throw new Error('Tempus Dominus Bootstrap4\'s requires jQuery. jQuery must be included before Tempus Dominus Bootstrap4\'s JavaScript.');
+}
+
++function ($) {
+  var version = $.fn.jquery.split(' ')[0].split('.');
+  if ((version[0] < 2 && version[1] < 9) || (version[0] === 1 && version[1] === 9 && version[2] < 1) || (version[0] >= 4)) {
+    throw new Error('Tempus Dominus Bootstrap4\'s requires at least jQuery v3.0.0 but less than v4.0.0');
+  }
+}(jQuery);
+
+
+if (typeof moment === 'undefined') {
+  throw new Error('Tempus Dominus Bootstrap4\'s requires moment.js. Moment.js must be included before Tempus Dominus Bootstrap4\'s JavaScript.');
+}
+
+var version = moment.version.split('.')
+if ((version[0] <= 2 && version[1] < 17) || (version[0] >= 3)) {
+  throw new Error('Tempus Dominus Bootstrap4\'s requires at least moment.js v2.17.0 but less than v3.0.0');
+}
+
++function () {
+
+=======
+/*@preserve
+ * Tempus Dominus Bootstrap4 v5.1.2 (https://tempusdominus.github.io/bootstrap-4/)
+ * Copyright 2016-2018 Jonathan Peterson
+ * Licensed under MIT (https://github.com/tempusdominus/bootstrap-3/blob/master/LICENSE)
+ */
+
+if (typeof jQuery === 'undefined') {
+  throw new Error('Tempus Dominus Bootstrap4\'s requires jQuery. jQuery must be included before Tempus Dominus Bootstrap4\'s JavaScript.');
+}
+
++function ($) {
+  var version = $.fn.jquery.split(' ')[0].split('.');
+  if ((version[0] < 2 && version[1] < 9) || (version[0] === 1 && version[1] === 9 && version[2] < 1) || (version[0] >= 4)) {
+    throw new Error('Tempus Dominus Bootstrap4\'s requires at least jQuery v3.0.0 but less than v4.0.0');
+  }
+}(jQuery);
+
+
+if (typeof moment === 'undefined') {
+  throw new Error('Tempus Dominus Bootstrap4\'s requires moment.js. Moment.js must be included before Tempus Dominus Bootstrap4\'s JavaScript.');
+}
+
+var version = moment.version.split('.')
+if ((version[0] <= 2 && version[1] < 17) || (version[0] >= 3)) {
+  throw new Error('Tempus Dominus Bootstrap4\'s requires at least moment.js v2.17.0 but less than v3.0.0');
+}
+
++function () {
+
+>>>>>>> Stashed changes
+>>>>>>> 890e203
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -355,8 +419,18 @@ var DateTimePicker = function ($, moment) {
             this._int();
         }
 
+<<<<<<< HEAD
         /**
          * @return {string}
+=======
+<<<<<<< Updated upstream
+        /**
+         * @return {string}
+=======
+        /**
+         * @return {string}
+>>>>>>> Stashed changes
+>>>>>>> 890e203
          */
 
 
@@ -1506,8 +1580,18 @@ var DateTimePicker = function ($, moment) {
                 return NAME;
             }
 
+<<<<<<< HEAD
             /**
              * @return {string}
+=======
+<<<<<<< Updated upstream
+            /**
+             * @return {string}
+=======
+            /**
+             * @return {string}
+>>>>>>> Stashed changes
+>>>>>>> 890e203
              */
 
         }, {
@@ -1516,8 +1600,18 @@ var DateTimePicker = function ($, moment) {
                 return DATA_KEY;
             }
 
+<<<<<<< HEAD
             /**
              * @return {string}
+=======
+<<<<<<< Updated upstream
+            /**
+             * @return {string}
+=======
+            /**
+             * @return {string}
+>>>>>>> Stashed changes
+>>>>>>> 890e203
              */
 
         }, {
@@ -1526,8 +1620,18 @@ var DateTimePicker = function ($, moment) {
                 return EVENT_KEY;
             }
 
+<<<<<<< HEAD
             /**
              * @return {string}
+=======
+<<<<<<< Updated upstream
+            /**
+             * @return {string}
+=======
+            /**
+             * @return {string}
+>>>>>>> Stashed changes
+>>>>>>> 890e203
              */
 
         }, {
@@ -2713,10 +2817,24 @@ var TempusDominusBootstrap4 = function ($) {
         return TempusDominusBootstrap4;
     }(DateTimePicker);
 
+<<<<<<< HEAD
     /**
     * ------------------------------------------------------------------------
     * jQuery
     * ------------------------------------------------------------------------
+=======
+<<<<<<< Updated upstream
+    /**
+    * ------------------------------------------------------------------------
+    * jQuery
+    * ------------------------------------------------------------------------
+=======
+    /**
+    * ------------------------------------------------------------------------
+    * jQuery
+    * ------------------------------------------------------------------------
+>>>>>>> Stashed changes
+>>>>>>> 890e203
     */
 
 
@@ -2774,6 +2892,18 @@ var TempusDominusBootstrap4 = function ($) {
     };
 
     return TempusDominusBootstrap4;
+<<<<<<< HEAD
 }(jQuery);
 
 }();
+=======
+<<<<<<< Updated upstream
+}(jQuery);
+
+}();
+=======
+}(jQuery);
+
+}();
+>>>>>>> Stashed changes
+>>>>>>> 890e203

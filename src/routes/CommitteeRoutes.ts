@@ -12,19 +12,33 @@ router.post(
 );
 
 router.post(
-  "/createGame/:id",
+  "/createGame",
   authorization.comittee,
   CommitteeController.createTournament
 );
 
 router.put(
-  "/approve/:id",
+  "/approve",
   authorization.comittee,
   CommitteeController.approveSubmission
 );
 
 router.put(
-  "/approveGroup/:id",
+  "/approveGroup",
+  authorization.comittee,
+  CommitteeController.approveGroup
+);
+
+router.put(
+  "/kickParticipant",
+  authorization.comittee,
+  CommitteeController.kickParticipant
+);
+
+router.put("/kickGroup", authorization.comittee, CommitteeController.kickGroup);
+
+router.put(
+  "/kickGroup",
   authorization.comittee,
   CommitteeController.approveGroup
 );
@@ -48,7 +62,7 @@ router.put(
 );
 
 router.get(
-  "/seeList/:id",
+  "/seeList",
   authorization.comittee,
   CommitteeController.seeParticipantList
 );

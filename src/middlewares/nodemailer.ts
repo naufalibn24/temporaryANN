@@ -13,12 +13,18 @@ class SMTPemail {
         pass: process.env.Password,
       },
     });
+<<<<<<< HEAD
 
     var jwtSecret: any = process.env.JWT_Activate;
     const payload = {
       email: req.body.email,
       username: req.body.username,
     };
+=======
+    const jwtSecret: any = process.env.JWT_Activate;
+    const payload: any = { username: req.body.username, email: req.body.email };
+    console.log(payload);
+>>>>>>> 890e203
     const verifyingToken = jwt.sign(payload, jwtSecret);
 
     let mailOptions = {
