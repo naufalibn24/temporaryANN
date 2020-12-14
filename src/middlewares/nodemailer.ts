@@ -14,6 +14,7 @@ class SMTPemail {
       },
     });
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     var jwtSecret: any = process.env.JWT_Activate;
     const payload = {
@@ -26,6 +27,15 @@ class SMTPemail {
     console.log(payload);
 >>>>>>> 890e203
     const verifyingToken = jwt.sign(payload, jwtSecret);
+=======
+    const jwtSecret: any = process.env.JWT_Activate;
+    const payload: any = { username: req.body.username, email: req.body.email }
+    console.log(payload);
+    const verifyingToken = jwt.sign(
+      payload,
+      jwtSecret
+    );
+>>>>>>> 131d6384ed3bc929d993841bd02ca67c6e3ac9c7
 
     let mailOptions = {
       from: process.env.Email,
@@ -47,9 +57,8 @@ class SMTPemail {
       } else {
         res.status(201).json({
           success: true,
-          message: `Only one few step, a Verification code sent to ${
-            req.body.email
-          } on ${Date()}`,
+          message: `Only one few step, a Verification code sent to ${req.body.email
+            } on ${Date()}`,
           data: {
             username: req.body.username,
             email: req.body.email,
