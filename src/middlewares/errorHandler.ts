@@ -166,6 +166,10 @@ const errorHandling = (err, req, res, next) => {
       code = 403;
       message = `Already renamed it to your data`;
       break;
+    case "NO WINNER":
+      code = 404;
+      message = "there is still no winner";
+      break;
     default:
       code = 500;
       message = "Internal server error";

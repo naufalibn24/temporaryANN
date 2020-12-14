@@ -12,57 +12,49 @@ router.post(
 );
 
 router.post(
-  "/createGame/:id",
+  "/createGame",
   authorization.comittee,
   CommitteeController.createTournament
 );
 
 router.put(
-  "/approve/:id",
+  "/approve",
   authorization.comittee,
   CommitteeController.approveSubmission
 );
 
 router.put(
-  "/approveGroup/:id",
+  "/approveGroup",
   authorization.comittee,
   CommitteeController.approveGroup
 );
 
 router.put(
-  "/kickParticipant/:id",
+  "/kickParticipant",
   authorization.comittee,
   CommitteeController.kickParticipant
 );
 
-router.put(
-  "/kickGroup/:id",
-  authorization.comittee,
-  CommitteeController.kickGroup
-);
+router.put("/kickGroup", authorization.comittee, CommitteeController.kickGroup);
 
 router.put(
-  "/kickGroup/:id",
+  "/kickGroup",
   authorization.comittee,
   CommitteeController.approveGroup
 );
 
 router.get(
-  "/seeList/:id",
+  "/seeList",
   authorization.comittee,
   CommitteeController.seeParticipantList
 );
 
-router.put("/startFreeForAll/:id");
+router.put("/startFreeForAll");
+
+router.put("/putScore", authorization.comittee, CommitteeController.putScore);
 
 router.put(
-  "/putScore/:id",
-  authorization.comittee,
-  CommitteeController.putScore
-);
-
-router.put(
-  "/proceedTournament/:id",
+  "/proceedTournament",
   authorization.comittee,
   CommitteeController.proceedTournament
 );

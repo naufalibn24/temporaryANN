@@ -2,32 +2,32 @@ import User from "../models/UserModel";
 import Profile from "../models/User_ProfileModel";
 
 class ProfileController {
-  //   static async UserProfile(req, res, next) {
-  //     const { birthDate, fullname, subDistrict, phoneNumber } = req.body;
-  //     const { id } = req.params;
-  //     const user = await User.findById(id);
-  //     const picture = req.file.path;
-  //     const profile = new Profile({
-  //       _userId: id,
-  //       birthDate,
-  //       fullname,
-  //       subDistrict,
-  //       phoneNumber,
-  //       picture,
-  //     });
-  //     const userprofile = await Profile.findOne({ _userId: id });
+  static async UserProfile(req, res, next) {
+    const { birthDate, fullname, subDistrict, phoneNumber } = req.body;
+    const { id } = req.params;
+    const user = await User.findById(id);
+    const picture = req.file.path;
+    const profile = new Profile({
+      _userId: id,
+      birthDate,
+      fullname,
+      subDistrict,
+      phoneNumber,
+      picture,
+    });
+    const userprofile = await Profile.findOne({ _userId: id });
 
-  //     if (userprofile) {
-  //       next({ name: "PROFILE_ADD" });
-  //     } else {
-  //       profile.save();
-  //       res.status(201).send({
-  //         success: true,
-  //         message: "Profile Created",
-  //         profile,
-  //       });
-  //     }
-  //   }
+    if (userprofile) {
+      next({ name: "PROFILE_ADD" });
+    } else {
+      profile.save();
+      res.status(201).send({
+        success: true,
+        message: "Profile Created",
+        profile,
+      });
+    }
+  }
 
   static seeProfile(req, res, next) {
     const { id } = req.params;

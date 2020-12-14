@@ -19,5 +19,7 @@ router.put(
   userController.forgotPassword,
   userController.resetPassword
 );
-
+router.get("/tournaments", userController.seeTournamentList);
+router.get("/tournamentopen", userController.tournamentAvailable);
+router.get("/tournamentdetail/:id", userController.seeTournamentDetail);
 export default router;

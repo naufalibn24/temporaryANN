@@ -3,7 +3,7 @@ import User from "../models/UserModel";
 
 class authorization {
   static async admin(req, res, next) {
-    const This: any = await User.findById(req.params.id);
+    const This: any = await User.findById(req._id);
     if (This.role == "admin") {
       next();
     } else {
@@ -12,7 +12,7 @@ class authorization {
   }
 
   static async headchief(req, res, next) {
-    const This: any = await User.findById(req.params.id);
+    const This: any = await User.findById(req._id);
     if (This.role == "headchief") {
       next();
     } else {
@@ -21,7 +21,7 @@ class authorization {
   }
 
   static async comittee(req, res, next) {
-    const This: any = await User.findById(req.params.id);
+    const This: any = await User.findById(req._id);
     if (This.role == "comittee") {
       next();
     } else {
@@ -30,7 +30,7 @@ class authorization {
   }
 
   static async participant(req, res, next) {
-    const This: any = await User.findById(req.params.id);
+    const This: any = await User.findById(req._id);
     if (
       This.role === "participant" ||
       This.role === "comittee" ||
@@ -44,7 +44,7 @@ class authorization {
   }
 
   static async user(req, res, next) {
-    const This: any = await User.findById(req.params.id);
+    const This: any = await User.findById(req._id);
     if (
       This.role === "user" ||
       This.role === "participant" ||
