@@ -515,7 +515,6 @@ class CommitteeController {
                   });
               });
             }
-            // }
           } else {
             next({ name: "STAGE_ERROR" });
           }

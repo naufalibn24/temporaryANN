@@ -1,6 +1,6 @@
 import Router from "express";
-import authentication from "../middlewares/authentication";
 import HeadChiefController from "../controllers/HeadchiefController";
+import authentication from "../middlewares/authentication";
 import authorization from "../middlewares/authorization";
 
 const router = Router();

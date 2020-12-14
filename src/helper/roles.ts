@@ -9,28 +9,19 @@ const roles = (function () {
         .createOwn("submit", "user")
 
     ac.grant("participant")
-        .readOwn("profile")
-        .createOwn("profile")
-        .updateOwn("profile")
+        .extend("user")
 
     ac.grant("comittee")
-        .readOwn("profile")
-        .createOwn("profile")
-        .updateOwn("profile")
-        .readAny("profile")
+        .extend("user")
         .create("rules")
         .updateOwn("assignpart")
 
     ac.grant("headchief")
-        .readOwn("profile")
-        .createOwn("profile")
-        .updateOwn("profile")
+        .extend("user")
         .updateOwn("assigncom")
 
     ac.grant("admin")
-        .readOwn("profile")
-        .createOwn("profile")
-        .updateOwn("profile")
+        .extend("user")
         .updateAny("assign")
 
     return ac;

@@ -20,6 +20,13 @@ router.put(
   userController.resetPassword
 );
 router.get("/tournaments", userController.seeTournamentList);
+<<<<<<< HEAD
 router.get("/tournamentopen", userController.tournamentAvailable);
 router.get("/tournamentdetail/:id", userController.seeTournamentDetail);
+=======
+router.get("/tournamentopen", userController.tournamentAvailable)
+router.get("/tournamentdetail/:id", userController.seeTournamentDetail)
+
+
+>>>>>>> e5282d1898f19581e3891a1238ce9f63290833dc
 export default router;

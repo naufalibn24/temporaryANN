@@ -1,6 +1,5 @@
 import Router from "express";
 import UnregisteredController from "../controllers/UnregisteredController";
-import UserController from "../controllers/UserController";
 import authentication from "../middlewares/authentication";
 import authorization from "../middlewares/authorization";
 

@@ -34,6 +34,10 @@
     "animate.css": "^3.7.2",
     "autoprefixer": "^10.0.2",
     "baconjs": "^3.0.17",
+<<<<<<< HEAD
+=======
+    "bracket": "0.0.6",
+>>>>>>> 890e203
     "chart.js": "^2.5.0",
     "css-animation": "^2.0.4",
     "datatables.net": "^1.10.22",

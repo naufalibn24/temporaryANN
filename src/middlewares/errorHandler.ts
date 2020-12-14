@@ -169,7 +169,10 @@ const errorHandling = (err, req, res, next) => {
     case "NO WINNER":
       code = 404;
       message = "there is still no winner";
+<<<<<<< HEAD
       break;
+=======
+>>>>>>> e5282d1898f19581e3891a1238ce9f63290833dc
     default:
       code = 500;
       message = "Internal server error";
