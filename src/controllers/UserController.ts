@@ -2,25 +2,6 @@ import jwt from "jsonwebtoken";
 import bcrypt, { hash } from "bcrypt";
 import User from "../models/UserModel";
 import UserProfile from "../models/User_ProfileModel";
-<<<<<<< HEAD
-import _, { identity } from "lodash";
-import console from "console";
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-import _ from "lodash";
->>>>>>> e5282d1898f19581e3891a1238ce9f63290833dc
-import Tournament from "../models/TournamentModel";
-import TournamentRules from "../models/TournamentRulesModel";
-
-import ItournamentRules from "../models/interfaces/TournamentRulesInterface";
-import TournamentReport from "../models/TournamentReportModel";
-<<<<<<< HEAD
-import { report } from "process";
-=======
-=======
-=======
->>>>>>> 131d6384ed3bc929d993841bd02ca67c6e3ac9c7
 import _, { identity } from "lodash";
 import console from "console";
 import Tournament from "../models/TournamentModel";
@@ -29,11 +10,6 @@ import TournamentRules from "../models/TournamentRulesModel";
 import ItournamentRules from "../models/interfaces/TournamentRulesInterface";
 import TournamentReport from "../models/TournamentReportModel";
 import { report } from "process";
-<<<<<<< HEAD
->>>>>>> 890e203
-=======
->>>>>>> 131d6384ed3bc929d993841bd02ca67c6e3ac9c7
->>>>>>> e5282d1898f19581e3891a1238ce9f63290833dc
 require("dotenv").config();
 
 class UserController {
@@ -60,36 +36,14 @@ class UserController {
   }
 
   static async signin(req, res, next) {
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> e5282d1898f19581e3891a1238ce9f63290833dc
     const { email, username, password, verifyingToken } = req.body;
     const Check: any = await User.findOne({ $or: [{ email }, { username }] });
     const Pass: any = await bcrypt.compare(password, Check?.password);
     const Profile: any = await UserProfile.findOne({ _userId: Check._id });
-<<<<<<< HEAD
     if (Check && Pass) {
       if (Check.role === "unregistered") {
         console.log(Check.role);
         const secret: any = process.env.JWT_Activate;
-=======
-<<<<<<< HEAD
-
-    if ((await Check) && (await Pass)) {
-      if (Profile) {
-        next();
-      } else {
-        const secret: any = process.env.JWT_Activate;
-        jwt.verify(verifyingToken, secret, (err, decoded) => {
-          if (decoded.email != email || decoded.username != username) {
-            next({ name: "INVALID_TOKEN" });
-=======
-    if (Check && Pass) {
-      if (Check.role === "unregistered") {
-        console.log(Check.role);
-        const secret: any = process.env.JWT_Activate;
->>>>>>> e5282d1898f19581e3891a1238ce9f63290833dc
         await jwt.verify(verifyingToken, secret, (err, decoded) => {
           if (decoded.email == email || decoded.username == username) {
             next();
@@ -112,10 +66,6 @@ class UserController {
             //         });
             //         profile.save();
             //         next();
-<<<<<<< HEAD
-=======
->>>>>>> 890e203
->>>>>>> e5282d1898f19581e3891a1238ce9f63290833dc
           } else {
             next({ name: "INVALID_TOKEN" });
             next();
@@ -123,35 +73,6 @@ class UserController {
         });
       } else {
         next();
-<<<<<<< HEAD
-=======
-=======
-    const {
-      email,
-      username,
-      password,
-      verifyingToken,
-    } = req.body;
-    const Check: any = await User.findOne({ $or: [{ email }, { username }] });
-    const Pass: any = await bcrypt.compare(password, Check?.password);
-    const Profile: any = await UserProfile.findOne({ _userId: Check._id });
-    if ((Check) && (Pass)) {
-      if (Check.role === "unregistered") {
-        console.log(Check.role)
-        const secret: any = process.env.JWT_Activate;
-        await jwt.verify(verifyingToken, secret, (err, decoded) => {
-          if (decoded.email == email || decoded.username == username) {
-            next()
-          }
-          else {
-            next({ name: "INVALID_TOKEN" })
-          }
-        })
-      }
-      else {
-        next()
->>>>>>> 131d6384ed3bc929d993841bd02ca67c6e3ac9c7
->>>>>>> e5282d1898f19581e3891a1238ce9f63290833dc
       }
     } else {
       next({ name: "NOT_FOUND" });
@@ -172,22 +93,10 @@ class UserController {
       await User.findOneAndUpdate(
         { $or: [{ email }, { username }] },
         { $set: { role: "user" } }
-<<<<<<< HEAD
       );
       return response;
-<<<<<<< HEAD
     } else {
       response;
-=======
-    } else {
-      response;
-=======
-      )
-      return response
-    } else {
-      response
->>>>>>> 131d6384ed3bc929d993841bd02ca67c6e3ac9c7
->>>>>>> e5282d1898f19581e3891a1238ce9f63290833dc
     }
   }
 
@@ -206,42 +115,10 @@ class UserController {
     if (resetLink) {
       const jwtforgottoken: any = process.env.JWT_ForgotPassword;
       jwt.verify(resetLink, jwtforgottoken, function (error, decodedData) {
-<<<<<<< HEAD
-        if (decodedData.email != email) {
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-        console.log(decodedData)
-        if (error) {
->>>>>>> 131d6384ed3bc929d993841bd02ca67c6e3ac9c7
-          throw { name: "INVALID_TOKEN" };
-        } else {
-          User.findOne({ resetLink }, (err, user) => {
-            if (err || !user) {
-              throw { name: "NOT_FOUND" };
-            } else {
-              const salt = bcrypt.genSaltSync(10);
-              const password = bcrypt.hashSync(newPassword, salt);
-              return User.findOneAndUpdate(
-                { resetLink },
-                { $set: { password } }
-              )
-                .then(() => {
-                  if (err) {
-                    throw { name: "INVALID_TOKEN" };
-                  } else {
-                    User.findOneAndUpdate(
-                      { email },
-                      { $set: { resetLink: null } }
-                    ).then(() => {
-                      res.status(200).json({
-                        success: true,
-                        message: `Password successfully changed`,
-=======
->>>>>>> e5282d1898f19581e3891a1238ce9f63290833dc
-          console.log(decodedData);
+        if (decodedData.email == email) {
+          console.log(decodedData, "ashdoha");
           if (error) {
+            console.log(decodedData, "asd");
             throw { name: "INVALID_TOKEN" };
           } else {
             User.findOne({ resetLink }, (err, user) => {
@@ -266,10 +143,6 @@ class UserController {
                           success: true,
                           message: `Password successfully changed`,
                         });
-<<<<<<< HEAD
-=======
->>>>>>> 890e203
->>>>>>> e5282d1898f19581e3891a1238ce9f63290833dc
                       });
                     }
                   })
@@ -289,10 +162,6 @@ class UserController {
     // const tournament= await Tournament.findOne ({_tournamentId})
     // const rules= await TournamentRules.findOne ({tournament._tournamentRulesId})
     // if(rules.maxParticipant >= data.participant.length )
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> e5282d1898f19581e3891a1238ce9f63290833dc
     const tournament: any = await Tournament.find().exec();
     const newTournament = await tournament.map(async (tournaments, index) => {
       const rules = await TournamentRules.findOne({
@@ -353,105 +222,20 @@ class UserController {
       } else {
         npg = "http://localhost:5000/tournaments?page=" + nextpage;
         ppg = "http://localhost:5000/tournaments?page=" + previouspage;
-<<<<<<< HEAD
-=======
-=======
-    const tournament: any = await Tournament.find().exec()
-    const newTournament = await tournament.map(async (tournaments, index) => {
-      const rules = await TournamentRules.findOne({ _id: tournaments._tournamentRulesId }).exec()
-      return { "id": tournaments._id, "rules": rules?.maxParticipant }
-    })
-
-    Promise.all(newTournament).then(results => {
-
-      const data = results.map(async (data: any, index) => {
-        const _id = data.id
-        const report = await TournamentReport.findOne({ _tournamentId: data.id })
-        const participant: any = report?.participant
-        console.log(data.rules, participant.length)
-        const tourn = await Tournament.findOne({ _id: data.id })
-
-
-        if (data.rules <= participant.length) {
-          return { status: 1, message: "tidak tersedia", data: tourn }
-
-        }
-        else {
-          return { status: 0, message: "tersedia", data: tourn }
-        }
-      })
-
-      Promise.all(data).then(result => {
-        res.status(200).send(result)
-      })
-    })
-
-
-  }
-
-  static async seeTournamentList(req, res, next) {
-    // pagination
-    // search pake regex
-    // const tournament= await Tournament.find()
-    // res.json({ tournament})
-    const { page = 1, limit = 5, q = '' } = req.query
-    try {
-      const tournament: any = await Tournament.find({ tournamentName: { '$regex': q, '$options': 'i' } })
-        .limit(limit * 1)
-        .skip((page - 1) * limit)
-        .exec()
-      const nextpage = parseInt(page) + parseInt("1")
-      const previouspage = parseInt(page) - parseInt("1")
-      const jumlahData = await Tournament.countDocuments({ tournamentName: { '$regex': q, '$options': 'i' } })
-      const jumlahpage = Math.ceil(jumlahData / limit)
-      console.log(jumlahpage)
-      var npg, ppg
-      if (parseInt(page) === jumlahpage && parseInt(page) === 1) {
-        npg = null
-        ppg = null
-      } else if (parseInt(page) === (jumlahpage)) {
-        ppg = 'http://localhost:5000/tournaments?page=' + previouspage
-        npg = null
-      }
-      else if (parseInt(page) === 1) {
-        npg = 'http://localhost:5000/tournaments?page=' + nextpage
-        ppg = null
-      } else {
-        npg = 'http://localhost:5000/tournaments?page=' + nextpage
-        ppg = 'http://localhost:5000/tournaments?page=' + previouspage
->>>>>>> 131d6384ed3bc929d993841bd02ca67c6e3ac9c7
->>>>>>> e5282d1898f19581e3891a1238ce9f63290833dc
       }
       res.status(200).send({
         tournament,
         page: page,
         totalPage: jumlahpage,
         nexpages: npg,
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> e5282d1898f19581e3891a1238ce9f63290833dc
         previousPage: ppg,
       });
     } catch (error) {
       console.error(error.message);
-<<<<<<< HEAD
-=======
-=======
-        previousPage: ppg
-      })
-    } catch (error) {
-      console.error(error.message)
->>>>>>> 131d6384ed3bc929d993841bd02ca67c6e3ac9c7
->>>>>>> e5282d1898f19581e3891a1238ce9f63290833dc
     }
   }
 
   static async seeTournamentDetail(req, res, next) {
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> e5282d1898f19581e3891a1238ce9f63290833dc
     const { id } = req.params;
     const tournament = await Tournament.findById(id);
     const participant = await TournamentReport.findOne({
@@ -471,52 +255,9 @@ class UserController {
       maximumage: rules?.age,
       slot: booked,
     });
-<<<<<<< HEAD
   }
 
   static async seeHallOfFame(req, res, next) {
-=======
-=======
-    const { id } = req.params
-    const tournament = await Tournament.findById(id)
-    const participant = await TournamentReport.findOne({
-      _tournamentId: id,
-    })
-    const part: any = participant?.participant.length
-    const rules = await TournamentRules.findOne({
-      _id: tournament?._tournamentRulesId,
-    })
-    const max: any = rules?.maxParticipant
-    const booked = parseInt(part) + "/" + parseInt(max)
-    res.status(200).send({ StartDate: tournament?.tournamentOpen, EndDate: tournament?.tournamentClose, participant: participant?.participant, by: rules?.subdistrict, maximumage: rules?.age, slot: booked })
->>>>>>> 131d6384ed3bc929d993841bd02ca67c6e3ac9c7
-  }
-
-  static async seeHallOfFame(req, res, next) {
-<<<<<<< HEAD
-    // const FFA:any = await Tournament.find({finished:true, tournamentType:'freeforall'})
-    // const BRANCHES:any = await Tournament.find({finished:true, tournamentType:'branches'})
-    // if(FFA){
-    //   // for looping berdasarkan FFA.length
-    //   const rank: any = await TournamentReport.find({
-    //     _tournamentId: FFA[i]._id,
-    //   });
-    //   const result = Math.max(rank.stageName);
-    //   const winner:any=await TournamentReport.find({stageName:result})
-    //   const sort= winner.participant[i].score
-    //   res.status(201).json({ result:sort.sort() });
-    // }else if (BRANCHES) {
-    //   // looping berdasarkan BRANCHES.length
-    //   const rank: any = await TournamentReport.findOne({
-    //     _tournamentId: BRANCHES._id,
-    //   });
-    //   const result = Math.max(rank.stageName);
-    //   const winner: any = await TournamentReport.find({ stageName: result });
-    //   const sort = winner.participant[i].score;
-    //   res.status(201).json({ result: sort.sort() });
-    // }
-=======
->>>>>>> e5282d1898f19581e3891a1238ce9f63290833dc
     const FFA: any = await Tournament.find({
       finished: true,
       tournamentType: "freeforall",
@@ -559,10 +300,6 @@ class UserController {
     }
     if (BRANCHES) {
     }
-<<<<<<< HEAD
-=======
->>>>>>> 890e203
->>>>>>> e5282d1898f19581e3891a1238ce9f63290833dc
   }
 }
 

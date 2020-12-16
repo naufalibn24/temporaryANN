@@ -4,18 +4,18 @@ import Profile from "../models/User_ProfileModel";
 class ProfileController {
   static async UserProfile(req, res, next) {
     const { birthDate, fullname, subDistrict, phoneNumber } = req.body;
-    const { id } = req.params;
-    const user = await User.findById(id);
-    const picture = req.file.path;
+
+    const user = await User.findById(req._id);
+    // const picture = req.file.path;
     const profile = new Profile({
-      _userId: id,
+      _userId: req._id,
       birthDate,
       fullname,
       subDistrict,
       phoneNumber,
-      picture,
+      // picture,
     });
-    const userprofile = await Profile.findOne({ _userId: id });
+    const userprofile = await Profile.findOne({ _userId: req._id });
 
     if (userprofile) {
       next({ name: "PROFILE_ADD" });
@@ -30,9 +30,10 @@ class ProfileController {
   }
 
   static seeProfile(req, res, next) {
-    const { id } = req.params;
-    Profile.findOne({ _userId: id })
+    console.log(req._id);
+    Profile.findOne({ _userId: req._id })
       .then((user) => {
+        console.log(user);
         if (user) {
           res.status(200).json({
             user: [
@@ -53,18 +54,19 @@ class ProfileController {
   }
 
   static changeProfile(req, res, next) {
-    const { id } = req.params;
     const { fullname } = req.body;
-    Profile.findOne({ _userId: id })
+    const id = req._id;
+    Profile.findOne({ _userId: req._id })
       .then((user) => {
         if (user && user.fullname != fullname) {
-          return Profile.findOneAndUpdate({ _userId: id }, { fullname }).then(
-            (user) => {
-              res.status(200).json({
-                message: `successfuly renamed to ${fullname}`,
-              });
-            }
-          );
+          return Profile.findOneAndUpdate(
+            { _userId: req._id },
+            { fullname }
+          ).then((user) => {
+            res.status(200).json({
+              message: `successfuly renamed to ${fullname}`,
+            });
+          });
         } else throw { name: "ALREADY_RENAMED" };
       })
       .catch(next);

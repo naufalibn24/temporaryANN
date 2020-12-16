@@ -15,11 +15,11 @@ export class HeadchiefService {
       .put<any>(`${environment.urlAddress}/chief/assign`, comittee)
       .pipe<any>((res: any) => res);
   }
-  public getparticipants(id): Observable<[seeParticipantList]> {
-    return this.http
-      .get(`${environment.urlAddress}/chief/participantlist/${id}`)
-      .pipe(map(this.getparticipants));
-  }
+  // public getparticipants(id): Observable<[seeParticipantList]> {
+  //   return this.http
+  //     .get(`${environment.urlAddress}/chief/participantlist/${id}`)
+  //     // .pipe(map(this.getparticipants));
+  // }
   //  getparticipants(): Observable<[]>{
   //   return this.http
   //     .get<seeParticipantList>(environment.urlAddress + "product")

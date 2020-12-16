@@ -5,6 +5,7 @@ export default interface Igroup extends mongoose.Document {
   member: [
     {
       _userId: any;
+      phoneNumber: string;
     }
   ];
   groupName: string;

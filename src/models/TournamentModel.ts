@@ -5,7 +5,6 @@ const tournamentSchema = new mongoose.Schema({
   tournamentName: {
     type: String,
     required: true,
-    unique: true,
     lowercase: true,
   },
   groupEntry: { type: Boolean, required: true },
@@ -13,7 +12,12 @@ const tournamentSchema = new mongoose.Schema({
   tournamentOpen: Date,
   tournamentStart: Date,
   tournamentClose: Date,
-  tournamentType: { type: String, required: true, lowercase: true },
+  tournamentType: {
+    type: String,
+    required: true,
+    lowercase: true,
+    enum: ["freeforall", "branches"],
+  },
   _tournamentRulesId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Rules",
@@ -23,10 +27,6 @@ const tournamentSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Report",
   },
-  // stageName: {
-  //   type: String,
-  //   default: "participantList",
-  // },
   stageName: {
     type: Number,
     default: 0,

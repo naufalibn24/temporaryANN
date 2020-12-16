@@ -9,8 +9,9 @@ const authentication = (req, res, next) => {
   if (access_token) {
     var JWT_Accesstoken: any = process.env.JWT_Accesstoken;
     jwt.verify(access_token, JWT_Accesstoken, (err, decoded) => {
-      if (err) next({ name: "INVALID_TOKEN" });
-      else {
+      if (err) {
+        next({ name: "INVALID_TOKEN" });
+      } else {
         req._id = decoded._id;
         next();
       }

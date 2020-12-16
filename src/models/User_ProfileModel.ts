@@ -17,7 +17,12 @@ export const userProfileSchema = new mongoose.Schema(
       ref: "Group",
     },
     birthDate: { type: Date, required: true },
-    subDistrict: { type: String, required: true, lowercase: true },
+    subDistrict: {
+      type: String,
+      required: true,
+      lowercase: true,
+      enum: ["kelapa gading", "jelambar", "klender", "kemang"],
+    },
     phoneNumber: { type: String, unique: true, required: true },
     fullname: { type: String, required: true },
     picture: { type: String },

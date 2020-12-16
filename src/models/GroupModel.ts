@@ -12,6 +12,7 @@ const GroupSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
       },
+      phoneNumber: { type: String, required: true },
     },
   ],
   groupName: { type: String, required: true, unique: true, lowercase: true },

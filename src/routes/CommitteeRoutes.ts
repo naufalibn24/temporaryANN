@@ -37,24 +37,10 @@ router.put(
 
 router.put("/kickGroup", authorization.comittee, CommitteeController.kickGroup);
 
-router.put(
-  "/kickGroup",
+router.post(
+  "/createRules",
   authorization.comittee,
-  CommitteeController.approveGroup
-);
-
-router.put(
-  "/kickParticipant",
-  authorization.comittee,
-  CommitteeController.kickParticipant
-);
-
-router.put("/kickGroup", authorization.comittee, CommitteeController.kickGroup);
-
-router.put(
-  "/kickGroup",
-  authorization.comittee,
-  CommitteeController.approveGroup
+  CommitteeController.createRules
 );
 
 router.get(

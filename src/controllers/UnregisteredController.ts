@@ -135,8 +135,7 @@ class unregistered {
 
   static async createGroup(req, res, next) {
     const { groupName } = req.body;
-
-    const myself: any = await UserProfile.findOne({ _userId: req.params.id });
+    const myself: any = await UserProfile.findOne({ _userId: req._id });
     const group: any = await Group.findOne({ groupName });
     if (myself._groupId == null || undefined) {
       if (!group) {
@@ -144,7 +143,9 @@ class unregistered {
         const datenow = Date.now();
         const age = Math.floor((datenow - birthdate) / 31536000000);
         const subDistrict = myself.subDistrict;
-        const users: any = [{ _userId: req.params.id }];
+        const users: any = [
+          { _userId: req._id, phoneNumber: myself?.phoneNumber },
+        ];
 
         const groups = await new Group({
           member: users,
@@ -155,7 +156,7 @@ class unregistered {
         groups.save();
 
         await UserProfile.findOneAndUpdate(
-          { _userId: req.params.id },
+          { _userId: req._id },
           { $set: { _groupId: groups._id } }
         );
 
@@ -179,7 +180,7 @@ class unregistered {
     });
 
     if (target) {
-      if (target.member[0]._userId == req.params.id) {
+      if (target.member[0]._userId == req._id) {
         if (target.member.length == 1) {
           const deleted: any = await Group.deleteOne({ groupName });
           await UserProfile.findByIdAndUpdate(player._id, {
@@ -201,11 +202,12 @@ class unregistered {
   }
 
   static async groupRecruit(req, res, next) {
-    const { member, groupName, age, subDistrict } = req.body;
+    const { _userId } = req.body;
+    console.log(_userId);
 
-    const user: any = await UserProfile.findOne({ _userId: member[0]._userId });
+    const user: any = await UserProfile.findOne({ _userId });
     const myself: any = await UserProfile.findOne({
-      _userId: req.params.id,
+      _userId: req._id,
     });
     const group: any = await Group.findById(myself._groupId);
 
@@ -214,9 +216,15 @@ class unregistered {
     const datenow = Date.now();
     const userAge = Math.floor((datenow - birthdate) / 31536000000);
     const MYAge = Math.floor((datenow - MYbirthdate) / 31536000000);
+    const member: any = [
+      {
+        _userId,
+        phoneNumber: user?.phoneNumber,
+      },
+    ];
 
     if (group) {
-      if (req.params.id == group.member[0]._userId) {
+      if (req._id == group.member[0]._userId) {
         if (user.subDistrict === myself.subDistrict) {
           if (user._tournamentId == null || undefined) {
             if (user._groupId == null || undefined) {
@@ -257,14 +265,19 @@ class unregistered {
 
   static async groupKick(req, res, next) {
     const { _userId } = req.body;
-    const leader: any = await UserProfile.findOne({ _userId: req.params.id });
+    const leader: any = await UserProfile.findOne({ _userId: req._id });
     const groupCheck: any = await Group.findById(leader._groupId);
+    const user: any = await UserProfile.findOne({ _userId });
+    const member: any = {
+      _userId,
+      phoneNumber: user?.phoneNumber,
+    };
 
     if (groupCheck) {
-      if (groupCheck.member[0]._userId == req.params.id) {
+      if (groupCheck.member[0]._userId == req._id) {
         if (groupCheck.member.length > 1) {
           await Group.findByIdAndUpdate(leader._groupId, {
-            $pull: { member: { _userId } },
+            $pull: { member: member },
           });
           const user: any = await UserProfile.findOneAndUpdate(
             { _userId },

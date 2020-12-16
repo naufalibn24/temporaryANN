@@ -10,21 +10,17 @@ import Group from "../models/GroupModel";
 import Inbox from "../models/InboxModel";
 import moment from "moment";
 import errorHandling from "../middlewares/errorHandler";
+import { log } from "console";
 
 class CommitteeController {
   static async createRules(req, res, next) {
-    const {
-      groupMember,
-      age,
-      subdistrict,
-      minParticipant,
-      maxParticipant,
-    } = req.body;
+    const { groupMember, age, minParticipant, maxParticipant } = req.body;
     const member: any =
       !groupMember || groupMember == undefined || groupMember == null
         ? 1
         : groupMember;
-    const rulesName: any = `${age}_${member}_${subdistrict}`;
+    const panitia = await UserProfile.findOne({ _userId: req._id });
+    const rulesName: any = `${age}_${member}_${panitia?.subDistrict}`;
 
     try {
       const rules = await Rules.findOne({ rulesName });
@@ -37,7 +33,7 @@ class CommitteeController {
           rulesName,
           groupMember,
           age,
-          subdistrict,
+          subdistrict: panitia?.subDistrict,
           minParticipant,
           maxParticipant,
         });
@@ -66,45 +62,59 @@ class CommitteeController {
       rulesName,
       groupEntry,
     } = req.body;
+    const user: any = await UserProfile.findOne({ _userId: req._id });
     const open: number = new Date(tournamentOpen).valueOf();
     const start: number = new Date(tournamentStart).valueOf();
     const close: number = new Date(tournamentClose).valueOf();
     const now: number = Date.now().valueOf();
-    const tournament = await Tournament.findOne({ tournamentName });
-    if (tournament) {
-      next({ name: "TOURNAMENT_EXIST" });
-    } else {
-      const rules = await TournamentRules.findOne({ rulesName });
-      if (!rules) {
-        next({ name: "RULES_NOT_FOUND" });
+    const rulesCheck: any = await TournamentRules.findOne({
+      rulesName,
+    });
+    const tournament = await Tournament.findOne({
+      tournamentName,
+    });
+    const tournamentNames: any = await Tournament.findOne({
+      tournamentName,
+      _tournamentRulesId: tournament?._tournamentRulesId,
+    });
+
+    if (rulesCheck?.subdistrict == user?.subDistrict) {
+      if (tournamentNames && rulesCheck) {
+        next({ name: "TOURNAMENT_EXIST" });
       } else {
-        if (close > start && start > open && open > now) {
-          const tournament = await new Tournament({
-            tournamentName,
-            tournamentOpen,
-            tournamentStart,
-            tournamentClose,
-            tournamentType,
-            _tournamentRulesId: rules?._id,
-            groupEntry,
-          });
-          tournament.save();
-          const tournamentReport = new TournamentReport({
-            _tournamentId: tournament._id,
-          });
-
-          tournamentReport.save();
-
-          res.status(201).json({
-            success: true,
-            message: `${tournamentName} tournament has successfully created`,
-          });
-
-          next();
+        if (!rulesCheck) {
+          next({ name: "RULES_NOT_FOUND" });
         } else {
-          next({ name: "TIME_ERR" });
+          if (close > start && start > open && open > now) {
+            const tournament = await new Tournament({
+              tournamentName,
+              tournamentOpen,
+              tournamentStart,
+              tournamentClose,
+              tournamentType,
+              _tournamentRulesId: rulesCheck?._id,
+              groupEntry,
+            });
+            tournament.save();
+            const tournamentReport = new TournamentReport({
+              _tournamentId: tournament._id,
+            });
+
+            tournamentReport.save();
+
+            res.status(201).json({
+              success: true,
+              message: `${tournamentName} tournament has successfully created`,
+            });
+
+            next();
+          } else {
+            next({ name: "TIME_ERR" });
+          }
         }
       }
+    } else {
+      next({ name: "NOT_AUTHORIZE" });
     }
   }
 
@@ -188,13 +198,7 @@ class CommitteeController {
   }
 
   static async approveGroup(req, res, next) {
-    const {
-      participant,
-      _tournamentId,
-      groupName,
-      _userId,
-      _groupId,
-    } = req.body;
+    const { _tournamentId, _groupId } = req.body;
 
     const group: any = await Group.findById(_groupId);
     const tournament: any = await Tournament.findById(_tournamentId);

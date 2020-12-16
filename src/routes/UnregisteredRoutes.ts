@@ -28,27 +28,23 @@ router.get(
 router.get("/inbox/:id", authorization.user, UnregisteredController.SeeInbox);
 
 router.post(
-  "/createGroup/:id",
+  "/createGroup",
   authorization.user,
   UnregisteredController.createGroup
 );
 
 router.delete(
-  "/demolishGroup/:id",
+  "/demolishGroup",
   authorization.user,
   UnregisteredController.demolishGroup
 );
 
 router.put(
-  "/groupRecruit/:id",
+  "/groupRecruit",
   authorization.user,
   UnregisteredController.groupRecruit
 );
 
-router.put(
-  "/groupKick/:id",
-  authorization.user,
-  UnregisteredController.groupKick
-);
+router.put("/groupKick", authorization.user, UnregisteredController.groupKick);
 
 export default router;
