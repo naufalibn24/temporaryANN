@@ -6,7 +6,7 @@ import authorization from "../middlewares/authorization";
 const router = Router();
 
 router.post(
-  "/submit/:id",
+  "/submit",
   authorization.user,
   UnregisteredController.SubmitTournament,
   UnregisteredController.sendSubmission

@@ -14,11 +14,14 @@ class unregistered {
       tournamentName: message,
     });
     const Committee: any = await User.findById({ _id: _CommitteeId });
+    const id = req._id;
+    const user = await User.findById(id);
     const group: any = await Tournament.findOne({ tournamentName: message });
     if (Committee) {
       if (inboxes == null || inboxes) {
-        const sender = await Inbox.findOne({ _senderId: req.params.id });
-        const entry = await Inbox.find({ _senderId: req.params.id, message });
+        const sender = await Inbox.findOne({ _senderId: user?._id });
+        console.log(sender);
+        const entry = await Inbox.find({ _senderId: user?._id, message });
         if (sender && entry.length != 0) {
           next({ name: "ALREADY_SUBMITTED" });
         } else {
@@ -52,8 +55,8 @@ class unregistered {
     const group: any = await Tournament.findOne({ tournamentName: message });
     if (Committee) {
       if (inboxes == null || inboxes) {
-        const sender = await Inbox.findOne({ _senderId: req.params.id });
-        const entry = await Inbox.find({ _senderId: req.params.id, message });
+        const sender = await Inbox.findOne({ _senderId: req._id });
+        const entry = await Inbox.find({ _senderId: req._id, message });
         if (sender && entry.length != 0) {
           next({ name: "ALREADY_SUBMITTED" });
         } else {
@@ -82,7 +85,7 @@ class unregistered {
     });
     const newinbox = await new Inbox({
       _userId: _CommitteeId,
-      _senderId: req.params.id,
+      _senderId: req._id,
       message,
     });
     newinbox.save();
@@ -102,7 +105,7 @@ class unregistered {
 
   static async notifications(req, res, next) {
     const notification: any = await Inbox.find({
-      _userId: req.params.id,
+      _userId: req._id,
       read: false,
     });
     if (notification.length > 0) {
@@ -111,7 +114,7 @@ class unregistered {
         data: notification,
       });
       return Inbox.findOneAndUpdate(
-        { _userId: req.params.id, read: false },
+        { _userId: req._id, read: false },
         { read: true }
       );
     } else {
@@ -120,16 +123,13 @@ class unregistered {
   }
 
   static async SeeInbox(req, res, next) {
-    const inbox: any = await Inbox.find({ _userId: req.params.id });
+    const inbox: any = await Inbox.find({ _userId: req._id });
 
     if (inbox.length == 0) {
       res.status(201).json({ success: true, message: "Inbox is empty" });
     } else {
       res.status(201).json({ data: inbox });
-      return Inbox.updateMany(
-        { _userId: req.params.id },
-        { $set: { read: true } }
-      );
+      return Inbox.updateMany({ _userId: req._id }, { $set: { read: true } });
     }
   }
 

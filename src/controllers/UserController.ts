@@ -177,7 +177,6 @@ class UserController {
           _tournamentId: data.id,
         });
         const participant: any = report?.participant;
-        console.log(data.rules, participant.length);
         const tourn = await Tournament.findOne({ _id: data.id });
 
         if (data.rules <= participant.length) {
@@ -262,6 +261,7 @@ class UserController {
       finished: true,
       tournamentType: "freeforall",
     });
+    console.log(FFA);
     const BRANCHES: any = await Tournament.find({
       finished: true,
       tournamentType: "branches",
@@ -282,7 +282,9 @@ class UserController {
           },
         },
 
-        { $unwind: { path: "$participant", preserveNullAndEmptyArrays: true } },
+        {
+          $unwind: { path: "$participant", preserveNullAndEmptyArrays: false },
+        },
         {
           $sort: {
             "participant.score": -1,

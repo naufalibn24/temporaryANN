@@ -12,6 +12,5 @@ export class User {
     picture:string;
     subdistrict:number;
     role: Role;
-    token?: string;
-    
+    token?: string; 
   }

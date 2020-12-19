@@ -6,7 +6,7 @@ import authentication from "../middlewares/authentication";
 const router = Router();
 
 router.post(
-  "/createRules/:id",
+  "/createRules",
   authorization.comittee,
   CommitteeController.createRules
 );

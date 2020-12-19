@@ -33,7 +33,7 @@ class CommitteeController {
           rulesName,
           groupMember,
           age,
-          subdistrict: panitia?.subDistrict,
+          subDistrict: panitia?.subDistrict,
           minParticipant,
           maxParticipant,
         });
@@ -78,7 +78,7 @@ class CommitteeController {
       _tournamentRulesId: tournament?._tournamentRulesId,
     });
 
-    if (rulesCheck?.subdistrict == user?.subDistrict) {
+    if (rulesCheck?.subDistrict == user?.subDistrict) {
       if (tournamentNames && rulesCheck) {
         next({ name: "TOURNAMENT_EXIST" });
       } else {
@@ -94,6 +94,7 @@ class CommitteeController {
               tournamentType,
               _tournamentRulesId: rulesCheck?._id,
               groupEntry,
+              subDistrict: rulesCheck?.subDistrict,
             });
             tournament.save();
             const tournamentReport = new TournamentReport({
@@ -147,7 +148,7 @@ class CommitteeController {
 
     if (user._tournamentId == null) {
       if (tournamentReport.stageName === 0) {
-        if (user.subDistrict == tournamentRule.subdistrict) {
+        if (user.subDistrict == tournamentRule.subDistrict) {
           if (tournament != null) {
             if (tournament.groupEntry == false) {
               if (tournamentRule.age == userAge) {
@@ -212,7 +213,7 @@ class CommitteeController {
         if (tournament.groupEntry == true) {
           if (group.member.length == rules.groupMember) {
             if (rules.age == group.age) {
-              if (rules.subdistrict == group.subDistrict) {
+              if (rules.subDistrict == group.subDistrict) {
                 if (rules.maxParticipant >= report.participant.length + 1) {
                   const groupId: any = { _groupId };
 
