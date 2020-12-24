@@ -6,11 +6,22 @@ import _, { identity } from "lodash";
 import console from "console";
 import Tournament from "../models/TournamentModel";
 import TournamentRules from "../models/TournamentRulesModel";
-
 import ItournamentRules from "../models/interfaces/TournamentRulesInterface";
 import TournamentReport from "../models/TournamentReportModel";
-import { report } from "process";
+
 require("dotenv").config();
+
+const redis = require("redis");
+const { RateLimiterRedis } = require("rate-limiter-flexible");
+const redisClient = redis.createClient({
+  enable_offline_queue: false,
+});
+
+redisClient.on("error", function (error) {
+  console.error(error);
+});
+
+//
 
 class UserController {
   static async signup(req, res, next) {
@@ -35,47 +46,95 @@ class UserController {
     }
   }
 
+  static async limiter(req, res, next) {
+    const maxWrongAttemptsByIPperDay = 100;
+    const maxConsecutiveFailsByUsernameAndIP = 5;
+
+    const limiterSlowBruteByIP = new RateLimiterRedis({
+      redis: redisClient,
+      keyPrefix: "login_fail_ip_per_day",
+      points: maxWrongAttemptsByIPperDay,
+      duration: 60 * 60 * 24,
+      blockDuration: 60 * 60 * 24, // Block for 1 day, if 100 wrong attempts per day
+    });
+
+    const limiterConsecutiveFailsByUsernameAndIP = new RateLimiterRedis({
+      redis: redisClient,
+      keyPrefix: "login_fail_consecutive_username_and_ip",
+      points: maxConsecutiveFailsByUsernameAndIP,
+      duration: 60 * 60 * 24 * 90, // Store number for 90 days since first fail
+      blockDuration: 60 * 60 * 24 * 365 * 20, // Block for infinity after consecutive fails
+    });
+
+    const getUsernameIPkey = (username, ip) => `${username}_${ip}`;
+  }
+
   static async signin(req, res, next) {
     const { email, username, password, verifyingToken } = req.body;
-    const Check: any = await User.findOne({ $or: [{ email }, { username }] });
-    const Pass: any = await bcrypt.compare(password, Check?.password);
-    const Profile: any = await UserProfile.findOne({ _userId: Check._id });
-    if (Check && Pass) {
-      if (Check.role === "unregistered") {
-        console.log(Check.role);
-        const secret: any = process.env.JWT_Activate;
-        await jwt.verify(verifyingToken, secret, (err, decoded) => {
-          if (decoded.email == email || decoded.username == username) {
-            next();
+    try {
+      const Check: any = await User.findOne({ $or: [{ email }, { username }] });
+      const Pass: any = await bcrypt.compare(password, Check?.password);
+      const Profile: any = await UserProfile.findOne({ _userId: Check._id });
 
-            // if ((await Check) && (await Pass)) {
-            //   if (Profile) {
-            //     next();
-            //   } else {
-            //     const secret: any = process.env.JWT_Activate;
-            //     jwt.verify(verifyingToken, secret, (err, decoded) => {
-            //       if (decoded.email != email || decoded.username != username) {
-            //         next({ name: "INVALID_TOKEN" });
-            //       } else {
-            //         const profile = new UserProfile({
-            //           _userId: Check._id,
-            //           birthDate,
-            //           subDistrict,
-            //           phoneNumber,
-            //           fullname,
-            //         });
-            //         profile.save();
-            //         next();
-          } else {
-            next({ name: "INVALID_TOKEN" });
-            next();
-          }
-        });
+      if (Check && Pass) {
+        if (Check.role === "unregistered") {
+          return res.status(201).json({
+            success: true,
+            message: "verify first",
+            role: `${Check.role}`,
+          });
+        } else {
+          const secret_key: any = process.env.JWT_Accesstoken;
+          const access_token: any = await jwt.sign(
+            { _id: Check._id },
+            secret_key
+          );
+          res.status(201).json({
+            success: true,
+            message: `${username || email} has successfully login`,
+            access_token,
+            role: `${Check.role}`,
+          });
+        }
       } else {
-        next();
+        next({ name: "NOT_FOUND" });
       }
-    } else {
+    } catch {
       next({ name: "NOT_FOUND" });
+    }
+  }
+
+  static async confirmUser(req, res, next) {
+    const { verifyingToken } = req.body;
+
+    try {
+      const secret: any = process.env.JWT_Activate;
+      await jwt.verify(verifyingToken, secret, async (err, decoded) => {
+        if (!decoded) {
+          next({ name: "INVALID_TOKEN" });
+        } else {
+          const email = decoded.email;
+          const Found: any = await User.findOne({
+            email,
+          });
+          const secret_key: any = process.env.JWT_Accesstoken;
+          const access_token: any = jwt.sign({ _id: Found._id }, secret_key);
+          const response = res.status(201).json({
+            success: true,
+            message: `${email} has successfully login`,
+            access_token,
+            role: `${Found.role}`,
+          });
+          if (Found.role === "unregistered") {
+            await User.findOneAndUpdate({ email }, { $set: { role: "user" } });
+            return response;
+          } else {
+            response;
+          }
+        }
+      });
+    } catch {
+      next({ name: "INVALID_TOKEN" });
     }
   }
 
@@ -88,6 +147,7 @@ class UserController {
       success: true,
       message: `${username || email} has successfully login`,
       access_token,
+      role: `${Found.role}`,
     });
     if (Found.role === "unregistered") {
       await User.findOneAndUpdate(
@@ -112,56 +172,57 @@ class UserController {
 
   static resetPassword(req, res, next) {
     const { resetLink, newPassword, email } = req.body;
-    if (resetLink) {
-      const jwtforgottoken: any = process.env.JWT_ForgotPassword;
-      jwt.verify(resetLink, jwtforgottoken, function (error, decodedData) {
-        if (decodedData.email == email) {
-          console.log(decodedData, "ashdoha");
-          if (error) {
-            console.log(decodedData, "asd");
-            throw { name: "INVALID_TOKEN" };
-          } else {
-            User.findOne({ resetLink }, (err, user) => {
-              if (err || !user) {
-                throw { name: "NOT_FOUND" };
-              } else {
-                const salt = bcrypt.genSaltSync(10);
-                const password = bcrypt.hashSync(newPassword, salt);
-                return User.findOneAndUpdate(
-                  { resetLink },
-                  { $set: { password } }
-                )
-                  .then(() => {
-                    if (err) {
-                      throw { name: "INVALID_TOKEN" };
-                    } else {
-                      User.findOneAndUpdate(
-                        { email },
-                        { $set: { resetLink: null } }
-                      ).then(() => {
-                        res.status(200).json({
-                          success: true,
-                          message: `Password successfully changed`,
+    try {
+      if (resetLink) {
+        const jwtforgottoken: any = process.env.JWT_ForgotPassword;
+        jwt.verify(resetLink, jwtforgottoken, function (error, decodedData) {
+          if (decodedData.email == email) {
+            if (error) {
+              console.log("asd");
+              next({ name: "INVALID_TOKEN" });
+            } else {
+              User.findOne({ resetLink }, (err, user) => {
+                if (err || !user) {
+                  next({ name: "NOT_FOUND" });
+                } else {
+                  const salt = bcrypt.genSaltSync(10);
+                  const password = bcrypt.hashSync(newPassword, salt);
+                  return User.findOneAndUpdate(
+                    { resetLink },
+                    { $set: { password } }
+                  )
+                    .then(() => {
+                      if (err) {
+                        throw { name: "INVALID_TOKEN" };
+                      } else {
+                        User.findOneAndUpdate(
+                          { email },
+                          { $set: { resetLink: null } }
+                        ).then(() => {
+                          res.status(200).json({
+                            success: true,
+                            message: `Password successfully changed`,
+                          });
                         });
-                      });
-                    }
-                  })
-                  .catch(next);
-              }
-            });
+                      }
+                    })
+                    .catch(next);
+                }
+              });
+            }
+          } else {
+            next({ name: "INVALID_TOKEN" });
           }
-        } else {
-          next({ name: "INVALID_TOKEN" });
-        }
-      });
+        });
+      } else {
+        next({ name: "INVALID_TOKEN" });
+      }
+    } catch {
+      next({ name: "INVALID_TOKEN" });
     }
   }
 
   static async tournamentAvailable(req, res, next) {
-    // const data= await TournamentReport.find ({_tournamentId,stageName:'participantList'})
-    // const tournament= await Tournament.findOne ({_tournamentId})
-    // const rules= await TournamentRules.findOne ({tournament._tournamentRulesId})
-    // if(rules.maxParticipant >= data.participant.length )
     const tournament: any = await Tournament.find().exec();
     const newTournament = await tournament.map(async (tournaments, index) => {
       const rules = await TournamentRules.findOne({
@@ -177,6 +238,7 @@ class UserController {
           _tournamentId: data.id,
         });
         const participant: any = report?.participant;
+        console.log(data);
         console.log(data.rules, participant.length);
         const tourn = await Tournament.findOne({ _id: data.id });
 
@@ -300,6 +362,15 @@ class UserController {
     }
     if (BRANCHES) {
     }
+  }
+
+  static async Jesting(req, res, next) {
+    const { stupid, moron } = req.body;
+    res.status(201).json({
+      success: true,
+      iq: stupid,
+      int: moron,
+    });
   }
 }
 

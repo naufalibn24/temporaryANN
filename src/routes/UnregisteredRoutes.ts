@@ -20,12 +20,12 @@ router.post(
 );
 
 router.get(
-  "/inboxNotifications/:id",
+  "/inboxNotifications",
   authorization.user,
   UnregisteredController.notifications
 );
 
-router.get("/inbox/:id", authorization.user, UnregisteredController.SeeInbox);
+router.get("/inbox", authorization.user, UnregisteredController.SeeInbox);
 
 router.post(
   "/createGroup",

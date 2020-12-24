@@ -28,7 +28,7 @@ export const userSchema = new mongoose.Schema(
 userSchema.pre<IUser>("save", async function (next) {
   try {
     const salt: any = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
+    this.password = await bcrypt.hashSync(this.password, salt);
     next();
   } catch (error) {
     next(error);

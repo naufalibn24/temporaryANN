@@ -102,7 +102,7 @@ class unregistered {
 
   static async notifications(req, res, next) {
     const notification: any = await Inbox.find({
-      _userId: req.params.id,
+      _userId: req._id,
       read: false,
     });
     if (notification.length > 0) {
@@ -111,7 +111,7 @@ class unregistered {
         data: notification,
       });
       return Inbox.findOneAndUpdate(
-        { _userId: req.params.id, read: false },
+        { _userId: req._id, read: false },
         { read: true }
       );
     } else {
@@ -120,16 +120,13 @@ class unregistered {
   }
 
   static async SeeInbox(req, res, next) {
-    const inbox: any = await Inbox.find({ _userId: req.params.id });
+    const inbox: any = await Inbox.find({ _userId: req._id });
 
     if (inbox.length == 0) {
       res.status(201).json({ success: true, message: "Inbox is empty" });
     } else {
       res.status(201).json({ data: inbox });
-      return Inbox.updateMany(
-        { _userId: req.params.id },
-        { $set: { read: true } }
-      );
+      return Inbox.updateMany({ _userId: req._id }, { $set: { read: true } });
     }
   }
 
