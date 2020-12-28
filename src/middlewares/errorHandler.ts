@@ -81,6 +81,10 @@ const errorHandling = (err, req, res, next) => {
       code = 400;
       message = "Verifying code is expired or false";
       break;
+    case "FIELD_BLANK":
+      code = 400;
+      message = "Please fill all form for registering";
+      break;
     case "MONGOOSE_ERROR":
       code = 500;
       message = "mongoose error";
@@ -96,6 +100,10 @@ const errorHandling = (err, req, res, next) => {
     case "LOGIN_FAIL":
       code = 401;
       message = "Email or password combination not found";
+      break;
+    case "EMAIL_NOT_VALID":
+      code = 401;
+      message = "Email format is not valid";
       break;
     case "MISSING_TOKEN":
       code = 401;

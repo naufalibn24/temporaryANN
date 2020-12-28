@@ -7,7 +7,6 @@ import upload from "../helper/multer";
 import authentication from "../middlewares/authentication";
 import authorization from "../middlewares/authorization";
 import ExpressBrute from "../middlewares/ratelimiter";
-import kakek from "./../middlewares/kakek";
 
 const router = Router();
 
@@ -16,17 +15,13 @@ router.post("/signup", userController.signup, SMTPemail._idActivation);
 // router.post("/signin", userController.signin, userController.proceed_signin);
 router.post("/signin", userController.signin, limiter);
 
-router.get("/test", kakek, limiter, async (req, res, next) => {
-  console.log("sampe akhir");
-});
-
 router.post("/confirm", userController.confirmUser);
 
-router.put("/forget", userController.forgotPassword, SMTPemail.forgotPassword);
+router.post("/forget", userController.forgotPassword, SMTPemail.forgotPassword);
 
-router.put(
+router.post(
   "/reset",
-  userController.forgotPassword,
+  // userController.forgotPassword,
   userController.resetPassword
 );
 router.get("/tournaments", userController.seeTournamentList);

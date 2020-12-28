@@ -89,11 +89,12 @@ class SMTPemail {
             if (err) {
               res.json({ Error: err });
             } else {
-              res
-                .status(200)
-                .send(
-                  `Forgot password token sent to ${req.body.email} on ${Date()}`
-                );
+              res.status(201).json({
+                success: true,
+                message: `Forgot password token sent to ${
+                  req.body.email
+                } on ${Date()}`,
+              });
             }
           });
         }
