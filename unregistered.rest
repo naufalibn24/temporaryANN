@@ -1,10 +1,9 @@
-
 ### LOGIN user
 POST http://localhost:5000/user/signin
 Content-Type: application/json
 
 {
-    "username":"d",
+    "username":"b",
     "password":"abc"
 }
 

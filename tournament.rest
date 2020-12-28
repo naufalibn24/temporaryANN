@@ -9,37 +9,24 @@ access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQwYjAyOTFhZDAyY
 }
 
 
-<<<<<<< HEAD
 
 
 ### PUT SCORE participant per person
 PUT http://localhost:5000/comittee/putScore/5fd0b0291ad02c425044c659
-=======
+
+
 ### SHUFFLING FFA participant
 PUT http://localhost:5000/comittee/shuffle/5fd0b0291ad02c425044c659
->>>>>>> 890e203
 Content-Type: application/json
 access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQwYjAyOTFhZDAyYzQyNTA0NGM2NTkiLCJpYXQiOjE2MDc1NDI0NDJ9.8xE1TpuYdyvdESBddJ5sPAqG4ehuxsfRu76Da_atBcY
 
 {
-<<<<<<< HEAD
-    "_id":"5fd3abe80db961494422a611",
-    "_userId":"5fd6580ed95e6f444c0148f7",
-    "score":42
-}
-
-
-
-### START BRANCHES
-PUT http://localhost:5000/comittee/proceedTournament/5fd0b0291ad02c425044c659
-=======
     "_id":"5fd3abe80db961494422a611"
 }
 
 
 ### SHUFFLING BRANCHES participant
 PUT http://localhost:5000/comittee/branches/5fd0b0291ad02c425044c659
->>>>>>> 890e203
 Content-Type: application/json
 access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQwYjAyOTFhZDAyYzQyNTA0NGM2NTkiLCJpYXQiOjE2MDc1NDI0NDJ9.8xE1TpuYdyvdESBddJ5sPAqG4ehuxsfRu76Da_atBcY
 

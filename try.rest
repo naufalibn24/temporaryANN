@@ -3,9 +3,9 @@ POST http://localhost:5000/user/signup
 Content-Type: application/json
 
 {
-    "email":"jurukuncicpm@gmail.com",
-    "username":"x",
-    "password":"x"
+    "email":"talktomeself@gmail.com",
+    "username":"z",
+    "password":"z"
 }
 
 
@@ -14,13 +14,38 @@ POST http://localhost:5000/user/signin
 Content-Type: application/json
 
 { 
-    "email":"jurukuncicpm@gmail.com",
+    "username":"z",
+    "password":"z"
+}
+
+
+### test
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{ 
+    "email":"ass",
+    "password":"asdd"
+}
+
+
+### test
+POST http://localhost:5000/user/confirm
+Content-Type: application/json
+
+{ 
+    "verifyingToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InoiLCJlbWFpbCI6InRhbGt0b21lc2VsZkBnbWFpbC5jb20iLCJpYXQiOjE2MDg2NTQwMjR9.kEsQ1VzBeOL-19Ok-W6f2jW2R1O-tfXCiDisfKLiZpw"
+}
+
+
+### test x
+POST http://localhost:5000/user/signin
+Content-Type: application/json
+
+{ 
+    "username":"x",
     "password":"x",
-    "verifyingToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRhbGt0b21lc2VsZkBnbWFpbC5jb20iLCJpYXQiOjE2MDc3NTc2MjB9.xDVmCPb_2txzWZGJFnI0xki-hYAPmpnQQC6D8hyxipM",
-    "birthDate":"1990-11-28",
-    "subDistrict":"jelambar",
-    "phoneNumber":"081323568932",
-    "fullname":"panthera"
+    "verifyingToken":""
 }
 
 
@@ -34,15 +59,26 @@ Content-Type: application/json
 }
 
 
+
+
+
 ### RESET password
 PUT http://localhost:5000/user/reset
 Content-Type: application/json
 
 { 
     "email":"talktomeself@gmail.com",
-    "resetLink":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRhbGt0b21lc2VsZkBnbWFpbC5jb20iLCJpYXQiOjE2MDc1MjY0NTl9.RbHPeAso182YbN3R6vzsPEXj1Dmn5XV9eDDR4tslNYE",
-    "newPassword":"abc"
+    "resetLink":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRhbGt0b21lc2VsZkBnbWFpbC5jb20iLCJpYXQiOjE2MDg2MTQ4MjZ9.OoZ3bEUrUKxY4LH2XtUCN3QOUzw-RkqUxziQWJFateU",
+    "newPassword":"x"
 }
+
+
+
+
+
+
+
+
 
 
 ### see inbox
@@ -52,22 +88,37 @@ access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmJjNzBmN2E0ODRjN
 
 
 ### see profile
-GET http://localhost:3000/user/profile/5fbc70f7a484c65004b44106
+GET http://localhost:5000/user/profile
 Content-Type: application/json
-access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmJjNzBmN2E0ODRjNjUwMDRiNDQxMDYiLCJpYXQiOjE2MDYxODUzMjl9.dT9qTuiYQE6BcyCt7jAI1yZH1kXY9M9-1UOhMjUx2do
+access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQxMDU1NTI0OWExZTA4NzQ1MzEyYzYiLCJpYXQiOjE2MDgyNzI5NjB9.ray6T78YYLynE3ll11E0fmApGW8L3T1Pv7O9IxtDbm8
 
 
 ### change profile
-PUT  http://localhost:3000/user/profile/5fbc70f7a484c65004b44106
+PUT  http://localhost:5000/user/profile
 Content-Type: application/json
-access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmJjNzBmN2E0ODRjNjUwMDRiNDQxMDYiLCJpYXQiOjE2MDYxODUzMjl9.dT9qTuiYQE6BcyCt7jAI1yZH1kXY9M9-1UOhMjUx2do
+access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQxMDU1NTI0OWExZTA4NzQ1MzEyYzYiLCJpYXQiOjE2MDgyNzI5NjB9.ray6T78YYLynE3ll11E0fmApGW8L3T1Pv7O9IxtDbm8
 
 {
-    "fullname":"terara"
+    "fullname":"amat sitanggang"
 }
 
 
 
 ### DEMO 
-GET  http://localhost:5000/csgo
+GET  http://localhost:5000/user/jesting
 Content-Type: application/json
+
+{
+    "stupid":"moronic",
+    "moron":"stupidity"
+}
+
+
+
+### DEMO 
+GET  http://localhost:5000/halloffame
+Content-Type: application/json
+
+
+
+
