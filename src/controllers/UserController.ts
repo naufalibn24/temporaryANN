@@ -26,23 +26,34 @@ redisClient.on("error", function (error) {
 class UserController {
   static async signup(req, res, next) {
     const { username, email, password } = req.body;
-    const emailCheck = await User.findOne({ email });
-    const usernameCheck = await User.findOne({ username });
-
-    if (emailCheck) {
-      next({ name: "EMAIL_EXIST" });
-    } else {
-      if (usernameCheck) {
-        next({ name: "USERNAME_EXIST" });
+    try {
+      const emailCheck = await User.findOne({ email });
+      const usernameCheck = await User.findOne({ username });
+      if (email && username && password) {
+        if (email.includes("@") === true) {
+          if (emailCheck) {
+            next({ name: "EMAIL_EXIST" });
+          } else {
+            if (usernameCheck) {
+              next({ name: "USERNAME_EXIST" });
+            } else {
+              const user = new User({
+                username,
+                email,
+                password,
+              });
+              user.save();
+              next();
+            }
+          }
+        } else {
+          next({ name: "EMAIL_NOT_VALID" });
+        }
       } else {
-        const user = new User({
-          username,
-          email,
-          password,
-        });
-        user.save();
-        next();
+        next({ name: "FIELD_BLANK" });
       }
+    } catch {
+      next({ name: "FIELD_BLANK" });
     }
   }
 
@@ -86,7 +97,7 @@ class UserController {
         } else {
           const secret_key: any = process.env.JWT_Accesstoken;
           const access_token: any = await jwt.sign(
-            { _id: Check._id },
+            { _id: Check._id, role: Check.role },
             secret_key
           );
           res.status(201).json({
@@ -163,6 +174,7 @@ class UserController {
   static async forgotPassword(req, res, next) {
     const { email } = req.body;
     const Check: any = await User.findOne({ email });
+
     if (Check) {
       next();
     } else {
@@ -172,13 +184,13 @@ class UserController {
 
   static resetPassword(req, res, next) {
     const { resetLink, newPassword, email } = req.body;
+
     try {
       if (resetLink) {
         const jwtforgottoken: any = process.env.JWT_ForgotPassword;
         jwt.verify(resetLink, jwtforgottoken, function (error, decodedData) {
           if (decodedData.email == email) {
             if (error) {
-              console.log("asd");
               next({ name: "INVALID_TOKEN" });
             } else {
               User.findOne({ resetLink }, (err, user) => {
@@ -193,7 +205,7 @@ class UserController {
                   )
                     .then(() => {
                       if (err) {
-                        throw { name: "INVALID_TOKEN" };
+                        next({ name: "INVALID_TOKEN" });
                       } else {
                         User.findOneAndUpdate(
                           { email },

@@ -9,24 +9,28 @@ Content-Type: application/json
 }
 
 
+
+### test
+POST http://localhost:5000/user/signup
+Content-Type: application/json
+
+{
+    "email":"ce",
+    "username":"b",
+    "password":"b"
+}
+
+
 ### test
 POST http://localhost:5000/user/signin
 Content-Type: application/json
 
 { 
-    "username":"z",
-    "password":"z"
+    "username":"b",
+    "password":"abc"
 }
 
 
-### test
-POST http://localhost:3000/login
-Content-Type: application/json
-
-{ 
-    "email":"ass",
-    "password":"asdd"
-}
 
 
 ### test
@@ -60,10 +64,20 @@ Content-Type: application/json
 
 
 
+### FORGOT password
+POST http://localhost:5000/user/forget
+Content-Type: application/json
+
+{ 
+    "email":"r"
+}
+
+
+
 
 
 ### RESET password
-PUT http://localhost:5000/user/reset
+POST http://localhost:5000/user/reset
 Content-Type: application/json
 
 { 
