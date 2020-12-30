@@ -20,21 +20,6 @@ const tournamentReportSchema = new mongoose.Schema({
     ref: "Tournament",
     required: true,
   },
-  // stageName: {
-  //   type: String,
-  //   enum: [
-  //     "participantList",
-  //     "aboutToBegin",
-  //     "shuffling",
-  //     "64Elimination",
-  //     "32Elimination",
-  //     "16Elimination",
-  //     "8Elimination",
-  //     "semifinal",
-  //     "third",
-  //     "final",
-  //     "result",
-  //   ],
   stageName: {
     type: Number,
     default: 0,

@@ -17,8 +17,10 @@ class unregistered {
     const group: any = await Tournament.findOne({ tournamentName: message });
     if (Committee) {
       if (inboxes == null || inboxes) {
-        const sender = await Inbox.findOne({ _senderId: req.params.id });
-        const entry = await Inbox.find({ _senderId: req.params.id, message });
+        // const sender = await Inbox.findOne({ _senderId: req.params.id });
+        // const entry = await Inbox.find({ _senderId: req.params.id, message });
+        const sender = await Inbox.findOne({ _senderId: req._id });
+        const entry = await Inbox.find({ _senderId: req._id, message });
         if (sender && entry.length != 0) {
           next({ name: "ALREADY_SUBMITTED" });
         } else {
@@ -52,8 +54,10 @@ class unregistered {
     const group: any = await Tournament.findOne({ tournamentName: message });
     if (Committee) {
       if (inboxes == null || inboxes) {
-        const sender = await Inbox.findOne({ _senderId: req.params.id });
-        const entry = await Inbox.find({ _senderId: req.params.id, message });
+        // const sender = await Inbox.findOne({ _senderId: req.params.id });
+        // const entry = await Inbox.find({ _senderId: req.params.id, message });
+        const sender = await Inbox.findOne({ _senderId: req._id });
+        const entry = await Inbox.find({ _senderId: req._id, message });
         if (sender && entry.length != 0) {
           next({ name: "ALREADY_SUBMITTED" });
         } else {
@@ -82,7 +86,8 @@ class unregistered {
     });
     const newinbox = await new Inbox({
       _userId: _CommitteeId,
-      _senderId: req.params.id,
+      // _senderId: req.params.id,
+      _senderId: req._id,
       message,
     });
     newinbox.save();
@@ -107,7 +112,8 @@ class unregistered {
     });
     if (notification.length > 0) {
       await res.status(201).json({
-        message: `You've got ${notification.length} new messages`,
+        // message: `You've got ${notification.length} new messages`,
+        message: notification.length,
         data: notification,
       });
       return Inbox.findOneAndUpdate(
@@ -120,18 +126,22 @@ class unregistered {
   }
 
   static async SeeInbox(req, res, next) {
-    const inbox: any = await Inbox.find({ _userId: req._id });
-
-    if (inbox.length == 0) {
-      res.status(201).json({ success: true, message: "Inbox is empty" });
-    } else {
-      res.status(201).json({ data: inbox });
-      return Inbox.updateMany({ _userId: req._id }, { $set: { read: true } });
+    try {
+      const inbox: any = await Inbox.find({ _userId: req._id });
+      if (inbox.length == 0) {
+        res.status(201).json({ success: true, message: "Inbox is empty" });
+      } else {
+        res.status(201).json({ message: inbox });
+        return Inbox.updateMany({ _userId: req._id }, { $set: { read: true } });
+      }
+    } catch {
+      next({ name: "NOT_FOUND" });
     }
   }
 
   static async createGroup(req, res, next) {
     const { groupName } = req.body;
+    const groupPict = req.file.path;
     const myself: any = await UserProfile.findOne({ _userId: req._id });
     const group: any = await Group.findOne({ groupName });
     if (myself._groupId == null || undefined) {
@@ -149,6 +159,7 @@ class unregistered {
           groupName,
           age,
           subDistrict,
+          groupPict,
         });
         groups.save();
 
@@ -171,6 +182,7 @@ class unregistered {
 
   static async demolishGroup(req, res, next) {
     const { groupName } = req.body;
+
     const target: any = await Group.findOne({ groupName });
     const player: any = await UserProfile.findOne({
       _userId: target.member[0]._userId,
@@ -200,7 +212,6 @@ class unregistered {
 
   static async groupRecruit(req, res, next) {
     const { _userId } = req.body;
-    console.log(_userId);
 
     const user: any = await UserProfile.findOne({ _userId });
     const myself: any = await UserProfile.findOne({

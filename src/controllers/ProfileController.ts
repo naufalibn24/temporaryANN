@@ -6,14 +6,14 @@ class ProfileController {
     const { birthDate, fullname, subDistrict, phoneNumber } = req.body;
 
     const user = await User.findById(req._id);
-    // const picture = req.file.path;
+    const picture = req.file.path;
     const profile = new Profile({
       _userId: req._id,
       birthDate,
       fullname,
       subDistrict,
       phoneNumber,
-      // picture,
+      picture,
     });
     const userprofile = await Profile.findOne({ _userId: req._id });
 

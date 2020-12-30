@@ -94,6 +94,7 @@ class SMTPemail {
                 message: `Forgot password token sent to ${
                   req.body.email
                 } on ${Date()}`,
+                email: req.body.email,
               });
             }
           });

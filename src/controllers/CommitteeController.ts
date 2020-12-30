@@ -62,6 +62,7 @@ class CommitteeController {
       rulesName,
       groupEntry,
     } = req.body;
+    const tournamentPict = req.file.path;
     const user: any = await UserProfile.findOne({ _userId: req._id });
     const open: number = new Date(tournamentOpen).valueOf();
     const start: number = new Date(tournamentStart).valueOf();
@@ -94,6 +95,7 @@ class CommitteeController {
               tournamentType,
               _tournamentRulesId: rulesCheck?._id,
               groupEntry,
+              tournamentPict,
             });
             tournament.save();
             const tournamentReport = new TournamentReport({

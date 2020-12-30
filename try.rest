@@ -91,14 +91,33 @@ Content-Type: application/json
 
 
 
+### test x
+POST http://localhost:5000/user/signin
+Content-Type: application/json
 
+{ 
+    "username":"zzz",
+    "password":"zzz"
+}
 
 
 
 ### see inbox
-GET http://localhost:3000/user/inbox/5fbc70f7a484c65004b44106
+GET http://localhost:5000/user/inbox
 Content-Type: application/json
-access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmJjNzBmN2E0ODRjNjUwMDRiNDQxMDYiLCJpYXQiOjE2MDYxODUzMjl9.dT9qTuiYQE6BcyCt7jAI1yZH1kXY9M9-1UOhMjUx2do
+access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmU5NjI0ODg1OTNmMjI5ZjgzNzMxNTUiLCJyb2xlIjoidXNlciIsImlhdCI6MTYwOTEzNTA1OX0.jiZ35_mLyZWGffASg7y5cksrpIJQVo1EhsBQLtAEyoE
+
+
+
+### see inbox notif
+GET http://localhost:5000/user/inboxNotifications
+Content-Type: application/json
+access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmU5NjI0ODg1OTNmMjI5ZjgzNzMxNTUiLCJyb2xlIjoidXNlciIsImlhdCI6MTYwOTEzNTA1OX0.jiZ35_mLyZWGffASg7y5cksrpIJQVo1EhsBQLtAEyoE
+
+
+
+
+
 
 
 ### see profile

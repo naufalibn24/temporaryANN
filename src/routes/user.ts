@@ -28,6 +28,4 @@ router.get("/tournaments", userController.seeTournamentList);
 router.get("/tournamentopen", userController.tournamentAvailable);
 router.get("/tournamentdetail/:id", userController.seeTournamentDetail);
 
-router.get("/jesting", userController.Jesting);
-
 export default router;

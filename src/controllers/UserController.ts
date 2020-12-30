@@ -321,9 +321,10 @@ class UserController {
     });
     const max: any = rules?.maxParticipant;
     const booked = parseInt(part) + "/" + parseInt(max);
-    res.status(200).send({
-      StartDate: tournament?.tournamentOpen,
-      EndDate: tournament?.tournamentClose,
+    res.status(200).json({
+      // StartDate: tournament?.tournamentOpen,
+      // EndDate: tournament?.tournamentClose,
+      tournament,
       participant: participant?.participant,
       by: rules?.subdistrict,
       maximumage: rules?.age,
@@ -374,15 +375,6 @@ class UserController {
     }
     if (BRANCHES) {
     }
-  }
-
-  static async Jesting(req, res, next) {
-    const { stupid, moron } = req.body;
-    res.status(201).json({
-      success: true,
-      iq: stupid,
-      int: moron,
-    });
   }
 }
 

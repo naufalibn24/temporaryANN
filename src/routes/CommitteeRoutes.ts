@@ -3,6 +3,7 @@ import UnregisteredUserTodo from "../controllers/UnregisteredController";
 import authorization from "../middlewares/authorization";
 import CommitteeController from "../controllers/CommitteeController";
 import authentication from "../middlewares/authentication";
+import upload from "../helper/multer";
 const router = Router();
 
 router.post(
@@ -14,6 +15,7 @@ router.post(
 router.post(
   "/createGame",
   authorization.comittee,
+  upload.single("tournamentPict"),
   CommitteeController.createTournament
 );
 
