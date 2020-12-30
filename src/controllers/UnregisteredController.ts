@@ -14,6 +14,8 @@ class unregistered {
       tournamentName: message,
     });
     const Committee: any = await User.findById({ _id: _CommitteeId });
+    const id = req._id;
+    const user = await User.findById(id);
     const group: any = await Tournament.findOne({ tournamentName: message });
     if (Committee) {
       if (inboxes == null || inboxes) {

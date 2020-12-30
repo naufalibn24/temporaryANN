@@ -3,7 +3,7 @@ import ItournamentRules from "./interfaces/TournamentRulesInterface";
 
 const tournamentRulesSchema = new mongoose.Schema({
   age: Number,
-  subdistrict: String,
+  subDistrict: String,
   groupMember: { type: Number, default: 1 },
   minParticipant: Number,
   maxParticipant: { type: Number, default: 100 },
