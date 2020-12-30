@@ -95,11 +95,8 @@ class CommitteeController {
               tournamentType,
               _tournamentRulesId: rulesCheck?._id,
               groupEntry,
-<<<<<<< HEAD
               tournamentPict,
-=======
               subDistrict: rulesCheck?.subDistrict,
->>>>>>> refs/remotes/origin/main
             });
             tournament.save();
             const tournamentReport = new TournamentReport({
