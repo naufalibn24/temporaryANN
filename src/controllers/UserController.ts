@@ -319,9 +319,10 @@ class UserController {
     });
     const max: any = rules?.maxParticipant;
     const booked = parseInt(part) + "/" + parseInt(max);
-    res.status(200).send({
-      StartDate: tournament?.tournamentOpen,
-      EndDate: tournament?.tournamentClose,
+    res.status(200).json({
+      // StartDate: tournament?.tournamentOpen,
+      // EndDate: tournament?.tournamentClose,
+      tournament,
       participant: participant?.participant,
       by: rules?.subdistrict,
       maximumage: rules?.age,

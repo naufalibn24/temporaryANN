@@ -15,7 +15,7 @@ var corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
+app.use("/images", express.static("images"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(routes);

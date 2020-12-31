@@ -6,8 +6,20 @@ import authorization from "../middlewares/authorization";
 
 const router = Router();
 
-router.post("/profile", ProfileController.UserProfile);
+router.post(
+  "/profile",
+  authorization.user,
+  upload.single("picture"),
+  ProfileController.UserProfile
+);
+
 router.get("/profile", authorization.user, ProfileController.seeProfile);
-router.put("/profile", authorization.user, ProfileController.changeProfile);
+
+router.put(
+  "/profile",
+  authorization.user,
+  upload.single("picture"),
+  ProfileController.changeProfile
+);
 
 export default router;

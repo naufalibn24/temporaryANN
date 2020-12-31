@@ -17,7 +17,9 @@ const authentication = (req, res, next) => {
       }
     });
     // } else next({ name: "MISSING_TOKEN" });
-  } else next({ name: "NOT_FOUND" });
+  } else {
+    next({ name: "NOT_FOUND" });
+  }
 };
 
 // const access_token = req.headers['x-access-token'] || req.headers['authorization'];

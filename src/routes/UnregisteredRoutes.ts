@@ -2,8 +2,11 @@ import Router from "express";
 import UnregisteredController from "../controllers/UnregisteredController";
 import authentication from "../middlewares/authentication";
 import authorization from "../middlewares/authorization";
+import upload from "../helper/multer";
 
 const router = Router();
+
+router.get("/getUser");
 
 router.post(
   "/submit",
@@ -13,7 +16,7 @@ router.post(
 );
 
 router.post(
-  "/submitGroup/:id",
+  "/submitGroup",
   authorization.user,
   UnregisteredController.SubmitTournamentAsGroup,
   UnregisteredController.sendSubmission
@@ -27,9 +30,12 @@ router.get(
 
 router.get("/inbox", authorization.user, UnregisteredController.SeeInbox);
 
+router.get("/group", authorization.user, UnregisteredController.seeGroup);
+
 router.post(
   "/createGroup",
   authorization.user,
+  upload.single("groupPict"),
   UnregisteredController.createGroup
 );
 

@@ -97,6 +97,10 @@ const errorHandling = (err, req, res, next) => {
       code = 401;
       message = "Profile already created ";
       break;
+    case "PROFILE_NOT_FOUND":
+      code = 401;
+      message = "Create a profile first";
+      break;
     case "LOGIN_FAIL":
       code = 401;
       message = "Email or password combination not found";
