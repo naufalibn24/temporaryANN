@@ -30,6 +30,8 @@ router.get(
 
 router.get("/inbox", authorization.user, UnregisteredController.SeeInbox);
 
+router.get("/group", authorization.user, UnregisteredController.seeGroup);
+
 router.post(
   "/createGroup",
   authorization.user,

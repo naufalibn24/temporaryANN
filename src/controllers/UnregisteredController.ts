@@ -3,6 +3,7 @@ import Inbox from "../models/InboxModel";
 import Tournament from "../models/TournamentModel";
 import Group from "../models/GroupModel";
 import UserProfile from "../models/User_ProfileModel";
+import Profile from "../models/User_ProfileModel";
 
 class unregistered {
   static async SubmitTournament(req, res, next) {
@@ -118,12 +119,16 @@ class unregistered {
         message: notification.length,
         data: notification,
       });
-      return Inbox.findOneAndUpdate(
-        { _userId: req._id, read: false },
-        { read: true }
-      );
+      // return Inbox.findOneAndUpdate(
+      //   { _userId: req._id, read: false },
+      //   { read: true }
+      // );
     } else {
-      res.status(201).json({ success: true, message: "no new message" });
+      res.status(201).json({
+        success: true,
+        //  message: "no new message"
+        message: notification.length,
+      });
     }
   }
 
@@ -131,13 +136,45 @@ class unregistered {
     try {
       const inbox: any = await Inbox.find({ _userId: req._id });
       if (inbox.length == 0) {
-        res.status(201).json({ success: true, message: "Inbox is empty" });
+        res.status(201).json({
+          success: true,
+          message: "Inbox is empty",
+          length: inbox.length,
+        });
       } else {
-        res.status(201).json({ message: inbox });
+        let falsy: number = 0;
+        for (let i in inbox) {
+          if (inbox[i].read != true) {
+            falsy++;
+          }
+        }
+        res.status(201).json({ message: inbox, length: inbox.length, falsy });
         return Inbox.updateMany({ _userId: req._id }, { $set: { read: true } });
       }
     } catch {
       next({ name: "NOT_FOUND" });
+    }
+  }
+
+  static async seeGroup(req, res, next) {
+    const user: any = await User.findById(req._id);
+    const profile: any = await Profile.findOne({ _userId: user._id });
+    const group: any = await Group.findById(profile._groupId);
+
+    if (group) {
+      let members: any = [];
+      for (let i in group.member) {
+        const member: any = await Profile.findOne({
+          _userId: group.member[i]._userId,
+        });
+        members.push(member);
+      }
+      return res.status(201).json({
+        group,
+        members: [members],
+      });
+    } else {
+      next({ name: "GROUP_NOT_FOUND" });
     }
   }
 

@@ -64,13 +64,21 @@ Content-Type: application/json
 
 
 
-### FORGOT password
-POST http://localhost:5000/user/forget
+
+
+
+
+
+### Tournament detail
+GET http://localhost:5000/user/tournamentdetail/5fec45873067435394f5b64d
 Content-Type: application/json
 
-{ 
-    "email":"r"
-}
+
+
+### HoF
+POST http://localhost:5000/halloffame
+Content-Type: application/json
+
 
 
 
@@ -99,6 +107,19 @@ Content-Type: application/json
     "username":"zzz",
     "password":"zzz"
 }
+
+
+
+### see profile
+GET http://localhost:5000/user/profile
+Content-Type: application/json
+access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmU5NjI0ODg1OTNmMjI5ZjgzNzMxNTUiLCJyb2xlIjoidXNlciIsImlhdCI6MTYwOTEzNTA1OX0.jiZ35_mLyZWGffASg7y5cksrpIJQVo1EhsBQLtAEyoE
+
+
+### see group
+GET http://localhost:5000/user/group
+Content-Type: application/json
+access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmU5NjI0ODg1OTNmMjI5ZjgzNzMxNTUiLCJyb2xlIjoidXNlciIsImlhdCI6MTYwOTEzNTA1OX0.jiZ35_mLyZWGffASg7y5cksrpIJQVo1EhsBQLtAEyoE
 
 
 
