@@ -9,8 +9,10 @@ class SMTPemail {
     let transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: process.env.Email,
-        pass: process.env.Password,
+        // user: process.env.Email,
+        // pass: process.env.Password,
+        user: `annscup@gmail.com`,
+        pass: `finalassignment`,
       },
     });
 
@@ -19,7 +21,8 @@ class SMTPemail {
     const verifyingToken = jwt.sign(payload, jwtSecret);
 
     let mailOptions = {
-      from: process.env.Email,
+      // from: process.env.Email,
+      from: "annscup@gmail.com",
       to: req.body.email,
       subject: "ANN cup Account Activation",
       html: `       
@@ -54,8 +57,10 @@ class SMTPemail {
     let transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: process.env.Email,
-        pass: process.env.Password,
+        // user: process.env.Email,
+        // pass: process.env.Password,
+        user: `annscup@gmail.com`,
+        pass: `finalassignment`,
       },
     });
     const jwtForgotPassword: any = process.env.JWT_ForgotPassword;
@@ -65,7 +70,8 @@ class SMTPemail {
     );
 
     let mailOptions = {
-      from: process.env.Email,
+      // from: process.env.Email,
+      from: `annscup@gmail.com`,
       to: req.body.email,
       subject: "Forgot Password token",
       html: `       
