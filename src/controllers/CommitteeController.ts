@@ -61,6 +61,7 @@ class CommitteeController {
       tournamentType,
       rulesName,
       groupEntry,
+      tournamentDescription,
     } = req.body;
     const tournamentPict = req.file.path;
     const user: any = await UserProfile.findOne({ _userId: req._id });
@@ -79,7 +80,7 @@ class CommitteeController {
       _tournamentRulesId: tournament?._tournamentRulesId,
     });
 
-    if (rulesCheck?.subDistrict == user?.subDistrict) {
+    if (rulesCheck?.subdistrict == user?.subDistrict) {
       if (tournamentNames && rulesCheck) {
         next({ name: "TOURNAMENT_EXIST" });
       } else {
@@ -96,7 +97,8 @@ class CommitteeController {
               _tournamentRulesId: rulesCheck?._id,
               groupEntry,
               tournamentPict,
-              subDistrict: rulesCheck?.subDistrict,
+              subDistrict: rulesCheck?.subdistrict,
+              tournamentDescription,
             });
             tournament.save();
             const tournamentReport = new TournamentReport({

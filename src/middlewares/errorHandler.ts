@@ -83,7 +83,7 @@ const errorHandling = (err, req, res, next) => {
       break;
     case "FIELD_BLANK":
       code = 400;
-      message = "Please fill all form for registering";
+      message = "Please ensure to fill all forms";
       break;
     case "MONGOOSE_ERROR":
       code = 500;
@@ -153,6 +153,10 @@ const errorHandling = (err, req, res, next) => {
     case "ADMIN_ONLY":
       code = 404;
       message = "Are you trying to break in";
+      break;
+    case "LEADER_ONLY":
+      code = 404;
+      message = "Only group leader can do this task";
       break;
     case "TIME_ERR":
       code = 404;

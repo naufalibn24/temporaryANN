@@ -13,4 +13,5 @@ export default interface ITournament extends mongoose.Document {
   // stageName: string;
   stageName: number;
   tournamentPict: any;
+  tournamentDescription: string;
 }

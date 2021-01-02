@@ -3,8 +3,8 @@ POST http://localhost:5000/user/signin
 Content-Type: application/json
 
 {
-    "username":"b",
-    "password":"abc"
+    "username":"abc",
+    "password":"xxx"
 }
 
 
@@ -25,24 +25,23 @@ access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQxMDU1NTI0OWExZ
 
 
 ### SUBMIT participation
-POST http://localhost:5000/user/submit/5fd10555249a1e08745312c6
+POST http://localhost:5000/user/submit
 Content-Type: application/json
-access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQxMDU1NTI0OWExZTA4NzQ1MzEyYzYiLCJpYXQiOjE2MDc1NzMzNzZ9.CA57QwuPNwhuVc6864xbRxfwwJBoSfynmIot4DI4G9U
+access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmU5NjI0ODg1OTNmMjI5ZjgzNzMxNTUiLCJyb2xlIjoidXNlciIsImlhdCI6MTYwOTEzNTA1OX0.jiZ35_mLyZWGffASg7y5cksrpIJQVo1EhsBQLtAEyoE
 
 {
-    "_CommitteeId":"5fd0b0291ad02c425044c659",
-    "message":"pubg"
+    "tournamentName":"dota2"
 }
 
 
 ### SUBMIT group
-POST http://localhost:5000/user/submitGroup/5fd10555249a1e08745312c6
+POST http://localhost:5000/user/submitGroup
 Content-Type: application/json
-access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQxMDU1NTI0OWExZTA4NzQ1MzEyYzYiLCJpYXQiOjE2MDc1NzMzNzZ9.CA57QwuPNwhuVc6864xbRxfwwJBoSfynmIot4DI4G9U
+access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmU5NjI0ODg1OTNmMjI5ZjgzNzMxNTUiLCJyb2xlIjoidXNlciIsImlhdCI6MTYwOTEzNTA1OX0.jiZ35_mLyZWGffASg7y5cksrpIJQVo1EhsBQLtAEyoE
 
 {
-    "_CommitteeId":"5fd0b0291ad02c425044c659",
-    "message":["dota","Cruxiates","5fd19319d95e6f444c0148d7","5fd1936fd95e6f444c0148da"]
+    "tournamentName":"elderscrollonline",
+    "groupName":"porcupinetree"
 }
 
 
@@ -50,6 +49,12 @@ access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQxMDU1NTI0OWExZ
 GET http://localhost:5000/user/inboxNotifications/5fd10555249a1e08745312c6
 Content-Type: application/json
 access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQxMDU1NTI0OWExZTA4NzQ1MzEyYzYiLCJpYXQiOjE2MDc1NzMzNzZ9.CA57QwuPNwhuVc6864xbRxfwwJBoSfynmIot4DI4G9U
+
+
+### SEE group
+GET http://localhost:5000/user/group
+Content-Type: application/json
+access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmVjMmZjZGM0M2Q5YTMxNjA0MTYyMjQiLCJyb2xlIjoidXNlciIsImlhdCI6MTYwOTQ0MjY2Mn0.uOMUux0-uigk5Emx9iiwiBXOpEIh4YI3Z5JxpLZ9wJc
 
 
 ### SEE inbox
@@ -94,29 +99,23 @@ access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQxMDU1NTI0OWExZ
 
 
 ### RECRUIT group
-PUT http://localhost:5000/user/groupRecruit/5fd10555249a1e08745312c6
+PUT http://localhost:5000/user/groupRecruit
 Content-Type: application/json
-access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQxMDU1NTI0OWExZTA4NzQ1MzEyYzYiLCJpYXQiOjE2MDc1NzMzNzZ9.CA57QwuPNwhuVc6864xbRxfwwJBoSfynmIot4DI4G9U
+access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmVjMmZjZGM0M2Q5YTMxNjA0MTYyMjQiLCJyb2xlIjoidXNlciIsImlhdCI6MTYwOTU5MTY4MH0.QPOsQMzmbBfa-p6YQjHM8PYHvxgTYLR6fwZsNoUoX5A
 
 {   
-      "member":[
-          {
-              "_userId":"5fd19319d95e6f444c0148d7"
-        }
-      ]  
+      "_userId":"5ff05a5ee5569c36ac3de366"   
 }
 
 
 
 ### KICK group
-PUT http://localhost:5000/user/groupRecruit/5fd10555249a1e08745312c6
+PUT http://localhost:5000/user/groupKick
 Content-Type: application/json
-access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQxMDU1NTI0OWExZTA4NzQ1MzEyYzYiLCJpYXQiOjE2MDc1NzMzNzZ9.CA57QwuPNwhuVc6864xbRxfwwJBoSfynmIot4DI4G9U
+access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmVjMmZjZGM0M2Q5YTMxNjA0MTYyMjQiLCJyb2xlIjoidXNlciIsImlhdCI6MTYwOTU5MTY4MH0.QPOsQMzmbBfa-p6YQjHM8PYHvxgTYLR6fwZsNoUoX5A
 
 {   
-      "member":[
-          {
-              "_userId":"5fd19319d95e6f444c0148d7"
-        }
-      ]  
+     
+      "_userId":"5ff05a5ee5569c36ac3de366"
+      
 }

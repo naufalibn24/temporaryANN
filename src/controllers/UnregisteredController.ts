@@ -4,81 +4,193 @@ import Tournament from "../models/TournamentModel";
 import Group from "../models/GroupModel";
 import UserProfile from "../models/User_ProfileModel";
 import Profile from "../models/User_ProfileModel";
+import { reduce } from "lodash";
 
 class unregistered {
+  // static async SubmitTournament(req, res, next) {
+  //   const { message, _CommitteeId } = req.body;
+  //   const inboxes: any = await Inbox.findOne({
+  //     _userId: _CommitteeId,
+  //   });
+  //   const tournament: any = await Tournament.findOne({
+  //     tournamentName: message,
+  //   });
+  //   const Committee: any = await User.findById({ _id: _CommitteeId });
+  //   const id = req._id;
+  //   const user = await User.findById(id);
+  //   const group: any = await Tournament.findOne({ tournamentName: message });
+  //   if (Committee) {
+  //     if (inboxes == null || inboxes) {
+  //       // const sender = await Inbox.findOne({ _senderId: req.params.id });
+  //       // const entry = await Inbox.find({ _senderId: req.params.id, message });
+  //       const sender = await Inbox.findOne({ _senderId: req._id });
+  //       const entry = await Inbox.find({ _senderId: req._id, message });
+  //       if (sender && entry.length != 0) {
+  //         next({ name: "ALREADY_SUBMITTED" });
+  //       } else {
+  //         if (!tournament) {
+  //           next({ name: "TOURNAMENT_NOT_FOUND" });
+  //         } else {
+  //           if (group.groupEntry == false) {
+  //             next();
+  //           } else {
+  //             next({ name: "GROUP_NEEDED" });
+  //           }
+  //         }
+  //       }
+  //     } else {
+  //       next({ name: "NOT_AUTHORIZE" });
+  //     }
+  //   } else {
+  //     next({ name: "NOT_AUTHORIZE" });
+  //   }
+  // }
+
   static async SubmitTournament(req, res, next) {
-    const { message, _CommitteeId } = req.body;
-    const inboxes: any = await Inbox.findOne({
-      _userId: _CommitteeId,
-    });
+    const { tournamentName } = req.body;
+
+    const profile: any = await Profile.findOne({ _userId: req._id });
     const tournament: any = await Tournament.findOne({
-      tournamentName: message,
+      tournamentName,
     });
-    const Committee: any = await User.findById({ _id: _CommitteeId });
-    const id = req._id;
-    const user = await User.findById(id);
-    const group: any = await Tournament.findOne({ tournamentName: message });
-    if (Committee) {
-      if (inboxes == null || inboxes) {
-        // const sender = await Inbox.findOne({ _senderId: req.params.id });
-        // const entry = await Inbox.find({ _senderId: req.params.id, message });
-        const sender = await Inbox.findOne({ _senderId: req._id });
-        const entry = await Inbox.find({ _senderId: req._id, message });
-        if (sender && entry.length != 0) {
-          next({ name: "ALREADY_SUBMITTED" });
-        } else {
-          if (!tournament) {
-            next({ name: "TOURNAMENT_NOT_FOUND" });
+    const Committee: any = await User.findOne({
+      role: "comittee",
+    });
+    const inboxes: any = await Inbox.find({
+      _userId: Committee._id,
+      _senderId: req._id,
+      message: { $in: [tournamentName] },
+    });
+
+    const message: any[] = [tournamentName];
+
+    if (tournament) {
+      if (profile._tournamentId === undefined || null) {
+        if (tournament.groupEntry === false) {
+          if (inboxes.length === 0) {
+            // console.log("daftar");
+            const newinbox = await new Inbox({
+              _userId: Committee._id,
+              _senderId: req._id,
+              message,
+            });
+            newinbox.save();
+
+            return res.status(201).json({
+              success: true,
+              message: `your proposal is submitted for ${message} to committe, stay tune until further announcement`,
+            });
           } else {
-            if (group.groupEntry == false) {
-              next();
-            } else {
-              next({ name: "GROUP_NEEDED" });
-            }
+            next({ name: "ALREADY_SUBMITTED" });
           }
+        } else {
+          next({ name: "GROUP_NEEDED" });
         }
       } else {
-        next({ name: "NOT_AUTHORIZE" });
+        next({ name: "ALREADY_PARTICIPATED" });
       }
     } else {
-      next({ name: "NOT_AUTHORIZE" });
+      next({ name: "TOURNAMENT_NOT_FOUND" });
     }
   }
 
+  // static async SubmitTournamentAsGroup(req, res, next) {
+  //   const { message, _CommitteeId } = req.body;
+  //   const inboxes: any = await Inbox.findOne({
+  //     _userId: _CommitteeId,
+  //   });
+  //   const tournament: any = await Tournament.findOne({
+  //     tournamentName: message[0],
+  //   });
+  //   const Committee: any = await User.findById({ _id: _CommitteeId });
+  //   const group: any = await Tournament.findOne({ tournamentName: message });
+  //   if (Committee) {
+  //     if (inboxes == null || inboxes) {
+  //       // const sender = await Inbox.findOne({ _senderId: req.params.id });
+  //       // const entry = await Inbox.find({ _senderId: req.params.id, message });
+  //       const sender = await Inbox.findOne({ _senderId: req._id });
+  //       const entry = await Inbox.find({ _senderId: req._id, message });
+  //       if (sender && entry.length != 0) {
+  //         next({ name: "ALREADY_SUBMITTED" });
+  //       } else {
+  //         if (!tournament) {
+  //           next({ name: "TOURNAMENT_NOT_FOUND" });
+  //         } else {
+  //           if (group.groupEntry == false) {
+  //             next({ name: "INDIVIDUAL_NEEDED" });
+  //           } else {
+  //             next();
+  //           }
+  //         }
+  //       }
+  //     } else {
+  //       next({ name: "NOT_AUTHORIZE" });
+  //     }
+  //   } else {
+  //     next({ name: "NOT_AUTHORIZE" });
+  //   }
+  // }
+
   static async SubmitTournamentAsGroup(req, res, next) {
-    const { message, _CommitteeId } = req.body;
-    const inboxes: any = await Inbox.findOne({
-      _userId: _CommitteeId,
-    });
+    const { tournamentName, groupName } = req.body;
+    const user: any = await User.findById(req._id);
     const tournament: any = await Tournament.findOne({
-      tournamentName: message[0],
+      tournamentName,
     });
-    const Committee: any = await User.findById({ _id: _CommitteeId });
-    const group: any = await Tournament.findOne({ tournamentName: message });
-    if (Committee) {
-      if (inboxes == null || inboxes) {
-        // const sender = await Inbox.findOne({ _senderId: req.params.id });
-        // const entry = await Inbox.find({ _senderId: req.params.id, message });
-        const sender = await Inbox.findOne({ _senderId: req._id });
-        const entry = await Inbox.find({ _senderId: req._id, message });
-        if (sender && entry.length != 0) {
-          next({ name: "ALREADY_SUBMITTED" });
-        } else {
-          if (!tournament) {
-            next({ name: "TOURNAMENT_NOT_FOUND" });
-          } else {
-            if (group.groupEntry == false) {
-              next({ name: "INDIVIDUAL_NEEDED" });
+    const Committee: any = await User.findOne({
+      role: "comittee",
+    });
+    const profile: any = await Profile.findOne({ _userId: req._id });
+    const inboxes: any = await Inbox.find({
+      _userId: Committee._id,
+      _senderId: req._id,
+      message: { $in: [tournamentName] },
+    });
+    const groupLead: any = await Group.findOne({ groupName });
+    const message: any[] = [tournamentName, groupName];
+    const leader: any = groupLead.member[0]._userId == req._id;
+    // console.log(req._id);
+    // console.log(groupLead.member[0]._userId);
+    // console.log(leader);
+
+    if (groupName != undefined || null) {
+      if (tournament) {
+        if (profile._tournamentId === undefined || null) {
+          if (tournament.groupEntry === true) {
+            if (profile._groupId != null || undefined) {
+              if (leader === true) {
+                if (inboxes.length === 0) {
+                  const newinbox = await new Inbox({
+                    _userId: Committee._id,
+                    _senderId: req._id,
+                    message,
+                  });
+                  newinbox.save();
+
+                  return res.status(201).json({
+                    success: true,
+                    message: `your proposal on behalf of ${message[1]} is submitted for ${message[0]} to committe, stay tune until further announcement`,
+                  });
+                } else {
+                  next({ name: "ALREADY_SUBMITTED" });
+                }
+              } else {
+                next({ name: "LEADER_ONLY" });
+              }
             } else {
-              next();
+              next({ name: "GROUP_NOT_FOUND" });
             }
+          } else {
+            next({ name: "INDIVIDUAL_NEEDED" });
           }
+        } else {
+          next({ name: "ALREADY_PARTICIPATED" });
         }
       } else {
-        next({ name: "NOT_AUTHORIZE" });
+        next({ name: "TOURNAMENT_NOT_FOUND" });
       }
     } else {
-      next({ name: "NOT_AUTHORIZE" });
+      next({ name: "FIELD_BLANK" });
     }
   }
 
@@ -171,7 +283,7 @@ class unregistered {
       }
       return res.status(201).json({
         group,
-        members: [members],
+        members,
       });
     } else {
       next({ name: "GROUP_NOT_FOUND" });
@@ -242,7 +354,7 @@ class unregistered {
           next({ name: "GROUP_NOT_EMPTY" });
         }
       } else {
-        next({ name: "FORBIDDEN" });
+        next({ name: "LEADER_ONLY" });
       }
     } else {
       next({ name: "GROUP_NOT_FOUND" });
@@ -299,11 +411,7 @@ class unregistered {
           next({ name: "DIFFERENT_SUBDISTRICT" });
         }
       } else {
-        console.log(group.member[0]._userId);
-        console.log(myself._userId);
-        console.log(myself._userId == group.member[0]._userId);
-
-        next({ name: "FORBIDDEN" });
+        next({ name: "LEADER_ONLY" });
       }
     } else {
       next({ name: "GROUP_NOT_FOUND" });
@@ -312,39 +420,43 @@ class unregistered {
 
   static async groupKick(req, res, next) {
     const { _userId } = req.body;
-    const leader: any = await UserProfile.findOne({ _userId: req._id });
-    const groupCheck: any = await Group.findById(leader._groupId);
-    const user: any = await UserProfile.findOne({ _userId });
-    const member: any = {
-      _userId,
-      phoneNumber: user?.phoneNumber,
-    };
+    try {
+      const leader: any = await UserProfile.findOne({ _userId: req._id });
+      const groupCheck: any = await Group.findById(leader._groupId);
+      const user: any = await UserProfile.findOne({ _userId });
+      const member: any = {
+        _userId,
+        phoneNumber: user?.phoneNumber,
+      };
 
-    if (groupCheck) {
-      if (groupCheck.member[0]._userId == req._id) {
-        if (groupCheck.member.length > 1) {
-          await Group.findByIdAndUpdate(leader._groupId, {
-            $pull: { member: member },
-          });
-          const user: any = await UserProfile.findOneAndUpdate(
-            { _userId },
-            {
-              $unset: { _groupId: "" },
-            }
-          );
-          res.status(201).json({
-            success: true,
-            message: `${user.fullname} has successfully kicked from ${groupCheck.groupName}`,
-          });
-          res.send("lanjut");
+      if (groupCheck) {
+        if (groupCheck.member[0]._userId == req._id) {
+          if (groupCheck.member.length > 1) {
+            await Group.findByIdAndUpdate(leader._groupId, {
+              $pull: { member: member },
+            });
+            const user: any = await UserProfile.findOneAndUpdate(
+              { _userId },
+              {
+                $unset: { _groupId: "" },
+              }
+            );
+            res.status(201).json({
+              success: true,
+              message: `${user.fullname} has successfully kicked from ${groupCheck.groupName}`,
+            });
+            res.send("lanjut");
+          } else {
+            next({ name: "GROUP_EMPTY" });
+          }
         } else {
-          next({ name: "GROUP_EMPTY" });
+          next({ name: "LEADER_ONLY" });
         }
       } else {
-        next({ name: "FORBIDDEN" });
+        next({ name: "GROUP_NOT_FOUND" });
       }
-    } else {
-      next({ name: "GROUP_NOT_FOUND" });
+    } catch {
+      next({ name: "LEADER_ONLY" });
     }
   }
 

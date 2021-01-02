@@ -11,15 +11,13 @@ router.get("/getUser");
 router.post(
   "/submit",
   authorization.user,
-  UnregisteredController.SubmitTournament,
-  UnregisteredController.sendSubmission
+  UnregisteredController.SubmitTournament
 );
 
 router.post(
   "/submitGroup",
   authorization.user,
-  UnregisteredController.SubmitTournamentAsGroup,
-  UnregisteredController.sendSubmission
+  UnregisteredController.SubmitTournamentAsGroup
 );
 
 router.get(

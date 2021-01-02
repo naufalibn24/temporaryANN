@@ -104,9 +104,11 @@ POST http://localhost:5000/user/signin
 Content-Type: application/json
 
 { 
-    "username":"zzz",
-    "password":"zzz"
+    "username":"abc",
+    "password":"xxx"
 }
+
+
 
 
 
@@ -120,6 +122,16 @@ access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmU5NjI0ODg1OTNmM
 GET http://localhost:5000/user/group
 Content-Type: application/json
 access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmU5NjI0ODg1OTNmMjI5ZjgzNzMxNTUiLCJyb2xlIjoidXNlciIsImlhdCI6MTYwOTEzNTA1OX0.jiZ35_mLyZWGffASg7y5cksrpIJQVo1EhsBQLtAEyoE
+
+
+### see group
+GET http://localhost:5000/user/group
+Content-Type: application/json
+access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmVjMmZjZGM0M2Q5YTMxNjA0MTYyMjQiLCJyb2xlIjoidXNlciIsImlhdCI6MTYwOTQwMjExN30.9WSd-UbIWyssEF22EI90aRtKcybpBIqSMr7d_61wGr0
+
+
+
+
 
 
 

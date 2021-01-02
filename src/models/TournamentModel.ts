@@ -31,7 +31,10 @@ const tournamentSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  tournamentPict: { type: String },
+  tournamentPict: {
+    type: String,
+  },
+  tournamentDescription: { type: String },
 });
 
 const Tournament = mongoose.model<Itournament>("Tournament", tournamentSchema);
