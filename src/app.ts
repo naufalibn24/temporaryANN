@@ -2,10 +2,10 @@ import express, { NextFunction } from "express";
 import cors from "cors";
 import mongooseconnect from "../src/configs/mongoose";
 import routes from "../src/routes";
-require("dotenv").config();
+// require("dotenv").config();
 
 const app = express();
-// const PORT =  5000;
+const PORT = process.env.PORT || 5000;
 
 mongooseconnect();
 
@@ -23,7 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(routes);
 
-app.listen(process.env.PORT || 5000, () => {
+app.listen(PORT, () => {
   console.log(
     "Express server listening on port %d in %s mode"
     // this.address().port,

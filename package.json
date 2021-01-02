@@ -2,6 +2,9 @@
   "name": "back-end",
   "version": "1.0.0",
   "description": "Final Assignment",
+  "engines": {
+    "node": "12.11.1"
+  },
   "main": "index.ts",
   "scripts": {
     "start": "node dist/app.js",
