@@ -43,6 +43,7 @@
     "redis-cli": "^2.0.0",
     "redis-server": "^1.2.2",
     "regex": "^0.1.1",
+    "serve": "^11.3.2",
     "unique-random-array": "^2.0.0"
   },
   "devDependencies": {
