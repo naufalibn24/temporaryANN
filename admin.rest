@@ -1,11 +1,11 @@
 
 ### LOGIN user
-POST http://localhost:3000/user/signin
+POST http://localhost:5000/user/signin
 Content-Type: application/json
 
 {
-    "email":"billGates@gmail.com",
-    "password":"ghijklmne"
+    "email":"666",
+    "password":"666"
 }
 
 
