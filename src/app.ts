@@ -14,6 +14,9 @@ var corsOptions = {
   credentials: true,
 };
 
+app.get("/", function (req, res) {
+  res.json({ message: "Hello Finally im running" });
+});
 app.use(cors(corsOptions));
 app.use("/images", express.static("images"));
 app.use(express.json());
