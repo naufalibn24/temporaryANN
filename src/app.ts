@@ -14,7 +14,7 @@ var corsOptions = {
   credentials: true,
 };
 
-app.use("*", (req, res) => {
+app.get("", (req, res) => {
   res.send("<h1>Welcome to your simple server! Awesome right</h1>");
 });
 app.use(cors(corsOptions));
