@@ -13,6 +13,8 @@ const tournamentReportSchema = new mongoose.Schema({
         ref: "User",
       },
       score: { type: Number, default: null },
+      picture: String,
+      fullname: String,
     },
   ],
   _tournamentId: {
@@ -20,6 +22,7 @@ const tournamentReportSchema = new mongoose.Schema({
     ref: "Tournament",
     required: true,
   },
+
   stageName: {
     type: Number,
     default: 0,

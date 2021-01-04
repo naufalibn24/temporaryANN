@@ -11,6 +11,7 @@ import Inbox from "../models/InboxModel";
 import moment from "moment";
 import errorHandling from "../middlewares/errorHandler";
 import { log } from "console";
+import Profile from "../models/User_ProfileModel";
 
 class CommitteeController {
   static async createRules(req, res, next) {
@@ -152,7 +153,7 @@ class CommitteeController {
 
     if (user._tournamentId == null) {
       if (tournamentReport.stageName === 0) {
-        if (user.subDistrict == tournamentRule.subDistrict) {
+        if (user.subDistrict == tournamentRule.subdistrict) {
           if (tournament != null) {
             if (tournament.groupEntry == false) {
               if (tournamentRule.age == userAge) {
@@ -170,9 +171,21 @@ class CommitteeController {
                     { $set: { _tournamentId } }
                   );
 
+                  const participant: any = {
+                    userId,
+                    fullname: user.fullname,
+                    picture: user.picture,
+                  };
+                  console.log(participant);
                   await TournamentReport.findOneAndUpdate(
                     { _tournamentId },
-                    { $push: { participant: userId } }
+                    {
+                      $push:
+                        // { participant: userId }
+                        {
+                          participant,
+                        },
+                    }
                   );
 
                   res.status(201).json({
@@ -376,11 +389,12 @@ class CommitteeController {
     const lists: any = await TournamentReport.findById(_id);
     res.status(201).json({
       success: true,
-      data: lists.participant,
+      // data: lists.participant,
+      lists,
     });
   }
 
-  // static async shufflingParticipantList(req, res, next) {
+  // static async proceedFFA(req, res, next) {
   //   const { _id } = req.body;
   //   const participant: any = await TournamentReport.findById(_id);
   //   const shuffled: any = shuffle(participant.participant);
@@ -412,41 +426,242 @@ class CommitteeController {
   //   }
   // }
 
-  // static async shufflingBranchesList(req, res, next) {
-  //   const { _id, participant, _userId } = req.body;
+  static async proceedFFA(req, res, next) {
+    const { _id } = req.body;
+    try {
+      const tournament: any = await Tournament.findById(_id);
+      const participant: any = await TournamentReport.findOne({
+        _tournamentId: tournament._id,
+      });
+      const shuffled: any = shuffle(participant.participant);
 
-  //   const list: any = await TournamentReport.findById(_id);
-  //   const shuffled: any = shuffle(list.participant);
+      // console.log(tournament);
+      // console.log(participant);
+      if (
+        tournament.stageName === participant.stageName &&
+        tournament.tournamentType == "freeforall"
+      ) {
+        const stageName: number = (await participant.stageName) + 1;
+        const tournamentReport = new TournamentReport({
+          _tournamentId: participant._tournamentId,
+          participant: shuffled,
+          stageName,
+        });
 
-  //   const tournament: any = await Tournament.findById(list._tournamentId);
+        tournamentReport.save();
+        const update: any = await Tournament.findByIdAndUpdate(
+          participant._tournamentId,
+          { $set: { stageName: tournamentReport.stageName } }
+        );
 
-  //   if (tournament.stageName === list.stageName) {
-  //     if (list.stageName === 0) {
-  //       for (let i = 0, j = shuffled.length; i < j; i += 2) {
-  //         const temparray = shuffled.slice(i, i + 2);
-  //         const stageName: number = (await list.stageName) + 1;
-  //         const tournamentReport = new TournamentReport({
-  //           _tournamentId: list._tournamentId,
-  //           participant: temparray,
-  //           stageName,
-  //         });
+        // res.status(201).json({
+        //   success: true,
+        //   message: `${update.tournamentName} has been moving to next stage`,
+        // });
 
-  //         tournamentReport.save();
-  //         const update: any = await Tournament.findByIdAndUpdate(
-  //           list._tournamentId,
-  //           { $set: { stageName: tournamentReport.stageName } }
-  //         );
+        const last: any = await TournamentReport.findOne({
+          $and: [{ _tournamentId: tournament._id }, { stageName }],
+        });
 
-  //         res.status(201).json({
-  //           success: true,
-  //           message: `${update.tournamentName} has been moving to next stage`,
-  //         });
-  //       }
-  //     }
-  //   } else {
-  //     next({ name: "STAGE_ERROR" });
-  //   }
-  // }
+        let participants: any[] = [];
+        for (let i = 0; i < last.participant.length; i++) {
+          const profile: any = await Profile.findOne({
+            _userId: last.participant[i]._userId,
+          });
+          console.log(profile);
+          await participants.push(profile);
+        }
+
+        res.status(201).json({
+          last,
+          participants,
+        });
+      } else {
+        next({ name: "STAGE_ERROR" });
+      }
+    } catch {
+      console.log("err");
+    }
+  }
+
+  static async finishFFA(req, res, next) {
+    const { _id } = req.body;
+    try {
+      const tournament: any = await Tournament.findById(_id);
+      const participant: any = await TournamentReport.findOne({
+        $and: [{ _tournamentId: tournament._id }, { stageName: 1 }],
+      });
+
+      console.log(tournament);
+      console.log(participant);
+      if (
+        tournament.stageName === participant.stageName &&
+        participant.stageName === 1
+      ) {
+        const stageName: number = (await participant.stageName) + 1;
+        const tournamentReport = new TournamentReport({
+          _tournamentId: participant._tournamentId,
+          participant: participant.participant,
+          stageName,
+        });
+
+        tournamentReport.save();
+        const update: any = await Tournament.findByIdAndUpdate(
+          participant._tournamentId,
+          { $set: { stageName: tournamentReport.stageName, finished: true } }
+        );
+
+        res.status(201).json({
+          success: true,
+          message: `${update.tournamentName} has been finish`,
+        });
+      } else {
+        next({ name: "STAGE_ERROR" });
+      }
+    } catch {
+      console.log("err");
+    }
+  }
+
+  static async proceedBranches(req, res, next) {
+    const { _id } = req.body;
+
+    try {
+      const Stage: any = await Tournament.findById(_id);
+      const Check: any = await TournamentReport.findOne({
+        _tournamentId: Stage._id,
+      });
+
+      const Shuffled: any = await shuffle(Check.participant);
+      // const scored: any = await TournamentReport.findOne({
+      //   _id,
+      //   participant: { $elemMatch: { score: null } },
+      // });
+
+      // console.log(Shuffled);
+      // console.log(scored);
+
+      if (Check && Stage) {
+        if (Stage.finished == false) {
+          if (Stage.stageName == Check.stageName) {
+            if (Stage.tournamentType == "branches") {
+              if (Check.stageName == 0) {
+                const participantNumber: number = Check.participant.length;
+                const participantList: any[] = [];
+                for (let i = 0; i < participantNumber; i++) {
+                  const profiles: any = await Profile.findOne({
+                    _userId: Check.participant[i]._userId,
+                  });
+                  participantList.push(profiles);
+                }
+                console.log(participantList);
+                const participants: any[] = Check.participant;
+                let match: number = await Math.ceil(participantNumber / 2);
+
+                function countMatch(match) {
+                  if (match === 1) {
+                    next({ name: "TOURNAMENT_ABOLISH" });
+                  } else if (
+                    match === 2 ||
+                    match === 4 ||
+                    match === 8 ||
+                    match === 16 ||
+                    match === 32 ||
+                    match === 64
+                  ) {
+                    return match;
+                  } else if (2 <= match && match < 4) {
+                    return 4;
+                  } else if (4 < match && match < 8) {
+                    return 8;
+                  } else if (8 < match && match < 16) {
+                    return 16;
+                  } else if (16 < match && match < 32) {
+                    return 32;
+                  } else if (32 < match && match < 64) {
+                    return 64;
+                  } else if (64 < match) {
+                    next({ name: "TOURNAMENT_ABOLISH" });
+                  }
+                }
+                let matches: number = countMatch(match);
+
+                let teams: any[] = [];
+                let tempTeams: any[] = [];
+
+                for (var i = 0; i < matches; i++) {
+                  const Check = typeof participantList[matches + i];
+                  if (Check == "undefined") {
+                    tempTeams.push(participantList[i].fullname, null);
+                  } else {
+                    tempTeams.push(
+                      participantList[i].fullname,
+                      participantList[matches + i].fullname
+                    );
+                  }
+
+                  teams.push(tempTeams);
+                  tempTeams = [];
+                }
+
+                return res.status(201).json({
+                  teams,
+                });
+              } else {
+                next({ name: "STAGE_ERROR" });
+              }
+            } else {
+              next({ name: "TOURNAMENTTYPE_NOT_RECOGNIZE" });
+            }
+          } else {
+            next({ name: "STAGE_ERROR" });
+          }
+        } else {
+          next({ name: "ALREADY_HAVE_WINNER" });
+        }
+      } else {
+        next({ name: "TOURNAMENT_NOT_FOUND" });
+      }
+    } catch {
+      console.log("err");
+    }
+  }
+
+  static async shufflingBranchesList(req, res, next) {
+    const { _id, participant, _userId } = req.body;
+
+    const list: any = await TournamentReport.findById(_id);
+    const shuffled: any = shuffle(list.participant);
+
+    const tournament: any = await Tournament.findById(list._tournamentId);
+
+    if (tournament.stageName === list.stageName) {
+      if (list.stageName === 0) {
+        for (let i = 0, j = shuffled.length; i < j; i += 2) {
+          const temparray = shuffled.slice(i, i + 2);
+          const stageName: number = (await list.stageName) + 1;
+          const tournamentReport = new TournamentReport({
+            _tournamentId: list._tournamentId,
+            participant: temparray,
+            stageName,
+          });
+
+          tournamentReport.save();
+          const update: any = await Tournament.findByIdAndUpdate(
+            list._tournamentId,
+            { $set: { stageName: tournamentReport.stageName } }
+          );
+
+          res.status(201).json({
+            success: true,
+            message: `${update.tournamentName} has been moving to next stage`,
+          });
+        }
+      }
+    } else {
+      next({ name: "STAGE_ERROR" });
+    }
+  }
 
   static async proceedTournament(req, res, next) {
     try {
@@ -458,15 +673,18 @@ class CommitteeController {
         _id,
         participant: { $elemMatch: { score: null } },
       });
-
+      // let result: any[] = [];
       if (Check && Stage) {
         if (Stage.finished == false) {
           if (Stage.stageName == Check.stageName) {
             // if (scored == null) {
+            let result: any[] = [];
             if (Stage.tournamentType == "branches") {
               if (Check.stageName == 0) {
+                // let result: any[] = [];
                 for (let i = 0; i < Shuffled.length; i += 2) {
                   let temparray = Shuffled.slice(i, i + 2);
+                  result.push(temparray);
                   const stageName: number = Check.stageName + 1;
                   const tournamentReport = new TournamentReport({
                     _tournamentId: Check._tournamentId,
@@ -479,10 +697,12 @@ class CommitteeController {
                   Tournament.findByIdAndUpdate(Check._tournamentId, {
                     $set: { stageName: tournamentReport.stageName },
                   }).then((update) => {
-                    res
+                    result.push(temparray);
+                    return res
                       .status(201)
                       .json({
                         success: true,
+                        result,
                         message: `${update?.tournamentName} has been moving to next stage`,
                       })
                       .catch((err) => {
@@ -538,7 +758,7 @@ class CommitteeController {
     }
   }
 
-  static async putScore(req, res, next) {
+  static async putGroupScore(req, res, next) {
     const { _groupId, _userId, _id, score } = req.body;
     const profile: any = await TournamentReport.findOne({
       _id,
@@ -563,6 +783,56 @@ class CommitteeController {
     } else {
       next({ name: "NOT_FOUND" });
     }
+  }
+
+  static async putScore(req, res, next) {
+    const { _userId, _id, score } = req.body;
+    const tournament: any = await Tournament.findById(_id);
+
+    const profile: any = await TournamentReport.findOne({
+      _tournamentId: tournament._id,
+      participant: { $elemMatch: { _userId } },
+    });
+
+    const profileFFA: any = await TournamentReport.findOne({
+      _tournamentId: tournament._id,
+      stageName: 1,
+      participant: { $elemMatch: { _userId } },
+    });
+
+    if (tournament.tournamentType == "freeforall") {
+      if (profileFFA != null) {
+        const put: any = await TournamentReport.findOneAndUpdate(
+          {
+            _tournamentId: tournament._id,
+            stageName: 1,
+            participant: { $elemMatch: { _userId } },
+          },
+          {
+            $set: {
+              "participant.$.score": score,
+            },
+          },
+          { new: true, upsert: true }
+        );
+
+        res.status(201).json({
+          success: true,
+          message: `${_userId} got ${score} on stage${put.stageName}`,
+          score,
+        });
+      } else {
+        next({ name: "NOT_FOUND" });
+      }
+    } else {
+      console.log("belom bikin");
+    }
+
+    // if (profile != null) {
+
+    // } else {
+    //   next({ name: "NOT_FOUND" });
+    // }
   }
 
   static async finishingStage(req, res, next) {

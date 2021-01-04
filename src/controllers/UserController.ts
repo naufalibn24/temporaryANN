@@ -377,6 +377,14 @@ class UserController {
     if (BRANCHES) {
     }
   }
+
+  static async tester(req, res, next) {
+    const pic = req.file;
+    const { test } = req.body;
+
+    console.log(pic);
+    console.log("body is ", test);
+  }
 }
 
 export default UserController;

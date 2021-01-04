@@ -51,9 +51,31 @@ router.get(
   CommitteeController.seeParticipantList
 );
 
-router.put("/startFreeForAll");
+router.put(
+  "/startFreeForAll",
+  authorization.comittee,
+  CommitteeController.proceedFFA
+);
+
+router.put(
+  "/endFreeForAll",
+  authorization.comittee,
+  CommitteeController.finishFFA
+);
 
 router.put("/putScore", authorization.comittee, CommitteeController.putScore);
+
+router.put(
+  "/startBranches",
+  authorization.comittee,
+  CommitteeController.proceedBranches
+);
+
+router.put(
+  "/putGroupScore",
+  authorization.comittee,
+  CommitteeController.putGroupScore
+);
 
 router.put(
   "/proceedTournament",

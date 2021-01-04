@@ -1,12 +1,6 @@
 ### test
-POST http://localhost:5000/user/signup
+GET http://localhost:5000/
 Content-Type: application/json
-
-{
-    "email":"talktomeself@gmail.com",
-    "username":"z",
-    "password":"z"
-}
 
 
 
@@ -29,8 +23,6 @@ Content-Type: application/json
     "username":"b",
     "password":"abc"
 }
-
-
 
 
 ### test

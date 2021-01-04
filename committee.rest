@@ -39,6 +39,18 @@ access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQ0NzJkYTVmNzQ1M
 
 
 
+### see list
+POST http://localhost:5000/comittee/createGame
+Content-Type: application/json
+access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQ0NzJkYTVmNzQ1MTIzNTQyNDM2NzkiLCJpYXQiOjE2MDc3NjIzOTd9.Qg3e1sGDLRMQznNCvIRFrqBqagbD01axXSq0JeOMyQY
+
+
+
+
+
+
+
+
 ### Create Tournament
 POST http://localhost:5000/comittee/createGame
 Content-Type: application/json
@@ -89,21 +101,13 @@ access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQ0NzJkYTVmNzQ1M
 }
 
 
-<<<<<<< HEAD
-### KICK per user
-PUT http://localhost:5000/comittee/kickParticipant/5fd0b0291ad02c425044c659
-=======
 
 ### APPROVE user AUTOMATICALLY through inbox
 PUT http://localhost:5000/comittee/approve/5fd472da5f74512354243679
-<<<<<<< HEAD
->>>>>>> 890e203
 Content-Type: application/json
 access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQ0NzJkYTVmNzQ1MTIzNTQyNDM2NzkiLCJpYXQiOjE2MDc3NjQyNjZ9.biwohMjoapabpGYppVUPptbW5MU_4ZZlTWeWJAGYFs8
 
 {
-<<<<<<< HEAD
-    
     "_userId":"5fd65b38d95e6f444c014905",
     "_tournamentId":"5fd3abe80db961494422a610"
 }
@@ -112,23 +116,18 @@ access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQ0NzJkYTVmNzQ1M
 ### KICK per group
 PUT http://localhost:5000/comittee/kickGroup/5fd0b0291ad02c425044c659
 =======
->>>>>>> 131d6384ed3bc929d993841bd02ca67c6e3ac9c7
 Content-Type: application/json
 access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQ0NzJkYTVmNzQ1MTIzNTQyNDM2NzkiLCJpYXQiOjE2MDc3NjQyNjZ9.biwohMjoapabpGYppVUPptbW5MU_4ZZlTWeWJAGYFs8
 
 {
     
     "_groupId":"5fd64c63eea1ad181cced3f1",
-    "_tournamentId":"5fd5d042ca00a00b444a9daf"
-=======
+    "_tournamentId":"5fd5d042ca00a00b444a9daf",
     "participant":[
         {
         "_userId":"5fd45b07d6ad681a84e41014"  
         }
     ],
     "_tournamentId":"5fd482369ef87537ec419427"
-<<<<<<< HEAD
->>>>>>> 890e203
-=======
->>>>>>> 131d6384ed3bc929d993841bd02ca67c6e3ac9c7
+
 }
