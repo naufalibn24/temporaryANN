@@ -605,6 +605,7 @@ class CommitteeController {
 
                 return res.status(201).json({
                   teams,
+                  result: [],
                 });
               } else {
                 next({ name: "STAGE_ERROR" });
