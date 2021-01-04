@@ -172,11 +172,10 @@ class CommitteeController {
                   );
 
                   const participant: any = {
-                    userId,
+                    _userId,
                     fullname: user.fullname,
                     picture: user.picture,
                   };
-                  console.log(participant);
                   await TournamentReport.findOneAndUpdate(
                     { _tournamentId },
                     {
@@ -463,18 +462,18 @@ class CommitteeController {
           $and: [{ _tournamentId: tournament._id }, { stageName }],
         });
 
-        let participants: any[] = [];
-        for (let i = 0; i < last.participant.length; i++) {
-          const profile: any = await Profile.findOne({
-            _userId: last.participant[i]._userId,
-          });
-          console.log(profile);
-          await participants.push(profile);
-        }
+        // let participants: any[] = [];
+        // for (let i = 0; i < last.participant.length; i++) {
+        //   const profile: any = await Profile.findOne({
+        //     _userId: last.participant[i]._userId,
+        //   });
+        //   console.log(profile);
+        //   await participants.push(profile);
+        // }
 
         res.status(201).json({
           last,
-          participants,
+          // participants,
         });
       } else {
         next({ name: "STAGE_ERROR" });
