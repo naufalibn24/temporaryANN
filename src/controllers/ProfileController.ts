@@ -89,16 +89,17 @@ class ProfileController {
 
   static changeProfile(req, res, next) {
     const { fullname } = req.body;
+    const picture = req.file.path
     const id = req._id;
     Profile.findOne({ _userId: req._id })
       .then((user) => {
         if (user && user.fullname != fullname) {
           return Profile.findOneAndUpdate(
             { _userId: req._id },
-            { fullname }
+            { fullname,picture }
           ).then((user) => {
             res.status(200).json({
-              message: `successfuly renamed to ${fullname}`,
+              message: `successfuly renamed to ${fullname} and your profile pict to ${picture}`,
             });
           });
         } else throw { name: "ALREADY_RENAMED" };

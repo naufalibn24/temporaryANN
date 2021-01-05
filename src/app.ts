@@ -1,10 +1,10 @@
-import express, { NextFunction } from "express";
+import express, { Application } from "express";
 import cors from "cors";
 import mongooseconnect from "../src/configs/mongoose";
 import routes from "../src/routes";
 require("dotenv").config();
 
-const app = express();
+export const app: Application = express();
 const PORT = 5000;
 
 mongooseconnect();
