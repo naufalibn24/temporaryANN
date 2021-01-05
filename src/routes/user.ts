@@ -26,6 +26,8 @@ router.post(
 router.get("/tournaments", userController.seeTournamentList);
 router.get("/tournamentopen", userController.tournamentAvailable);
 router.get("/tournamentdetail/:id", userController.seeTournamentDetail);
+router.get("/FFA/:id", userController.seeFFA);
+// router.get("/FFA/:id", userController.seeFFA);
 
 router.post("/tester", upload.single("pic"), userController.tester);
 export default router;

@@ -22,6 +22,11 @@ access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQwYjAyOTFhZDAyY
 
 # FREE FOR ALL ================================================================
 
+### SEE FFA
+GET http://localhost:5000/user/FFA/5fd3abe80db961494422a610
+Content-Type: application/json
+
+
 ### PROCEED FFA
 PUT http://localhost:5000/comittee/startFreeForAll
 Content-Type: application/json

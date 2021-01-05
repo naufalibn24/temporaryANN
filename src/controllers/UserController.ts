@@ -330,6 +330,37 @@ class UserController {
     });
   }
 
+  static async seeFFA(req, res, next) {
+    try {
+      const { id } = req.params;
+      const table: any = await Tournament.findById(id);
+      const report: any = await TournamentReport.findOne({
+        _tournamentId: id,
+        stageName: 0,
+      });
+      const reportADV: any = await TournamentReport.findOne({
+        _tournamentId: id,
+        stageName: table.stageName,
+      });
+
+      if (table.tournamentType == "freeforall") {
+        if (table.stageName == 0) {
+          res.status(201).json({
+            report,
+          });
+        } else {
+          res.status(201).json({
+            reportADV,
+          });
+        }
+      } else {
+        next({ name: "TOURNAMENTTYPE_NOT_RECOGNIZE" });
+      }
+    } catch {
+      next({ name: "TOURNAMENT_NOT_FOUND" });
+    }
+  }
+
   static async seeHallOfFame(req, res, next) {
     const FFA: any = await Tournament.find({
       finished: true,
