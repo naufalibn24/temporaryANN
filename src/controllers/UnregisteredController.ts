@@ -295,6 +295,7 @@ class unregistered {
     const groupPict = req.file.path;
     const myself: any = await UserProfile.findOne({ _userId: req._id });
     const group: any = await Group.findOne({ groupName });
+
     if (myself._groupId == null || undefined) {
       if (!group) {
         const birthdate: any = myself.birthDate.valueOf();
@@ -461,6 +462,7 @@ class unregistered {
   }
 
   static async groupEditProfile(req, res, next) {
+    // const pic = req.file;
     // const group = await Group.findbyid(_id)
     // multer
     // Group.findbyidandUpdate(_id,{$set:{groupPict}})

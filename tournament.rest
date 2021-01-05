@@ -1,18 +1,110 @@
 
 ### SEE list
-GET http://localhost:5000/comittee/seeList/5fd0b0291ad02c425044c659
+GET http://localhost:5000/comittee/seeList
 Content-Type: application/json
-access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQwYjAyOTFhZDAyYzQyNTA0NGM2NTkiLCJpYXQiOjE2MDc1NDI0NDJ9.8xE1TpuYdyvdESBddJ5sPAqG4ehuxsfRu76Da_atBcY
+access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQwYjAyOTFhZDAyYzQyNTA0NGM2NTkiLCJyb2xlIjoiY29taXR0ZWUiLCJpYXQiOjE2MDk2MTY3MjV9.CXhWmAzHGSnQ7b39Tx-PZbGcRAFiVWmpg-ElUpRCyO8
 
 {
-    "_id":"5fd3abe80db961494422a611"
+    "_id":"5ff0cc0ddafff345088ce337"
+}
+
+
+### PROCEED
+PUT http://localhost:5000/comittee/proceedTournament
+Content-Type: application/json
+access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQwYjAyOTFhZDAyYzQyNTA0NGM2NTkiLCJyb2xlIjoiY29taXR0ZWUiLCJpYXQiOjE2MDk2MTY3MjV9.CXhWmAzHGSnQ7b39Tx-PZbGcRAFiVWmpg-ElUpRCyO8
+
+{
+    "_id":"5ff0cc0ddafff345088ce337"
+}
+
+
+
+# FREE FOR ALL ================================================================
+
+### SEE FFA
+GET http://localhost:5000/user/FFA/5fd3abe80db961494422a610
+Content-Type: application/json
+
+
+### PROCEED FFA
+PUT http://localhost:5000/comittee/startFreeForAll
+Content-Type: application/json
+access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQwYjAyOTFhZDAyYzQyNTA0NGM2NTkiLCJyb2xlIjoiY29taXR0ZWUiLCJpYXQiOjE2MDk2MTY3MjV9.CXhWmAzHGSnQ7b39Tx-PZbGcRAFiVWmpg-ElUpRCyO8
+
+{
+    "_id":"5fd3abe80db961494422a610"
+}
+
+
+### PUT SCORE participant per person
+PUT http://localhost:5000/comittee/putScore
+Content-Type: application/json
+access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQwYjAyOTFhZDAyYzQyNTA0NGM2NTkiLCJyb2xlIjoiY29taXR0ZWUiLCJpYXQiOjE2MDk2MTY3MjV9.CXhWmAzHGSnQ7b39Tx-PZbGcRAFiVWmpg-ElUpRCyO8
+
+{
+    "_id":"5fd3abe80db961494422a610",
+    "_userId":"5ff37da6d8e41e560c673fef",
+    "score":"26"
+}
+
+
+
+### FINISH FFA
+PUT http://localhost:5000/comittee/endFreeForAll
+Content-Type: application/json
+access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQwYjAyOTFhZDAyYzQyNTA0NGM2NTkiLCJyb2xlIjoiY29taXR0ZWUiLCJpYXQiOjE2MDk2MTY3MjV9.CXhWmAzHGSnQ7b39Tx-PZbGcRAFiVWmpg-ElUpRCyO8
+
+{
+    "_id":"5fd3abe80db961494422a610"
+}
+
+# ================================================================ BRANCHES
+
+### PROCEED BRANCHES
+PUT http://localhost:5000/comittee/startBranches
+Content-Type: application/json
+access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQwYjAyOTFhZDAyYzQyNTA0NGM2NTkiLCJyb2xlIjoiY29taXR0ZWUiLCJpYXQiOjE2MDk2MTY3MjV9.CXhWmAzHGSnQ7b39Tx-PZbGcRAFiVWmpg-ElUpRCyO8
+
+{
+    "_id":"5fd3abe80db961494422a610"
+}
+
+
+### PUT SCORE participant per person
+PUT http://localhost:5000/comittee/putScore
+Content-Type: application/json
+access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQwYjAyOTFhZDAyYzQyNTA0NGM2NTkiLCJyb2xlIjoiY29taXR0ZWUiLCJpYXQiOjE2MDk2MTY3MjV9.CXhWmAzHGSnQ7b39Tx-PZbGcRAFiVWmpg-ElUpRCyO8
+
+{
+    "_id":"5fd3abe80db961494422a610",
+    "_userId":"5fd65947d95e6f444c0148ff",
+    "score":"26"
+}
+
+
+
+### FINISH BRANCHES
+PUT http://localhost:5000/comittee/endFreeForAll
+Content-Type: application/json
+access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQwYjAyOTFhZDAyYzQyNTA0NGM2NTkiLCJyb2xlIjoiY29taXR0ZWUiLCJpYXQiOjE2MDk2MTY3MjV9.CXhWmAzHGSnQ7b39Tx-PZbGcRAFiVWmpg-ElUpRCyO8
+
+{
+    "_id":"5fd3abe80db961494422a610"
 }
 
 
 
 
-### PUT SCORE participant per person
-PUT http://localhost:5000/comittee/putScore/5fd0b0291ad02c425044c659
+
+
+
+
+
+
+
+
+
 
 
 ### SHUFFLING FFA participant

@@ -12,8 +12,7 @@ const router = Router();
 
 router.post("/signup", userController.signup, SMTPemail._idActivation);
 
-// router.post("/signin", userController.signin, userController.proceed_signin);
-router.post("/signin", userController.signin, limiter);
+router.post("/signin", userController.signin);
 
 router.post("/confirm", userController.confirmUser);
 
@@ -27,5 +26,8 @@ router.post(
 router.get("/tournaments", userController.seeTournamentList);
 router.get("/tournamentopen", userController.tournamentAvailable);
 router.get("/tournamentdetail/:id", userController.seeTournamentDetail);
+router.get("/FFA/:id", userController.seeFFA);
+// router.get("/FFA/:id", userController.seeFFA);
 
+router.post("/tester", upload.single("pic"), userController.tester);
 export default router;

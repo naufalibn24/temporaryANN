@@ -81,6 +81,15 @@ const errorHandling = (err, req, res, next) => {
       code = 400;
       message = "Verifying code is expired or false";
       break;
+    case "TOURNAMENTTYPE_NOT_RECOGNIZE":
+      code = 400;
+      message = "Tournament type is false";
+      break;
+    case "TOURNAMENT_ABOLISH":
+      code = 400;
+      message =
+        "Tournament has not enough participant or simply has too many participant";
+      break;
     case "FIELD_BLANK":
       code = 400;
       message = "Please ensure to fill all forms";
