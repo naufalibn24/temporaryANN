@@ -3,8 +3,8 @@ POST http://localhost:5000/user/signin
 Content-Type: application/json
 
 {
-    "email":"A@gmail.com",
-    "password":"a"
+    "username":"a",
+    "password":"abc"
 }
 
 
@@ -90,13 +90,13 @@ access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQ0NzJkYTVmNzQ1M
 }
 
 ### APPROVE per user
-PUT http://localhost:5000/comittee/approve/5fd0b0291ad02c425044c659
+PUT http://localhost:5000/comittee/approve
 Content-Type: application/json
-access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQ0NzJkYTVmNzQ1MTIzNTQyNDM2NzkiLCJpYXQiOjE2MDc3NjIzOTd9.Qg3e1sGDLRMQznNCvIRFrqBqagbD01axXSq0JeOMyQY
+access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQwYjAyOTFhZDAyYzQyNTA0NGM2NTkiLCJyb2xlIjoiY29taXR0ZWUiLCJpYXQiOjE2MDk3OTA5Nzl9.qCg_AnBq1FKeAC3bw7ksR03yZCCzHCC6izY9RT1Uw14
 
 {
     
-    "_userId":"5fd65b38d95e6f444c014905",
+    "_userId":"5ff37ebed8e41e560c673ff6",
     "_tournamentId":"5fd3abe80db961494422a610"
 }
 

@@ -28,8 +28,8 @@ POST http://localhost:5000/user/signin
 Content-Type: application/json
 
 { 
-    "username":"www",
-    "password":"www"
+    "username":"a",
+    "password":"abc"
 }
 
 
