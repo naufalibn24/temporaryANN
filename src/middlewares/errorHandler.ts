@@ -94,6 +94,10 @@ const errorHandling = (err, req, res, next) => {
       code = 400;
       message = "Please ensure to fill all forms";
       break;
+    case "WRONG_FORMAT":
+      code = 400;
+      message = "You have enter wrong format, please recheck";
+      break;
     case "MONGOOSE_ERROR":
       code = 500;
       message = "mongoose error";

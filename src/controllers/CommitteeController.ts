@@ -54,73 +54,81 @@ class CommitteeController {
   }
 
   static async createTournament(req, res, next) {
-    const {
-      tournamentName,
-      tournamentOpen,
-      tournamentStart,
-      tournamentClose,
-      tournamentType,
-      rulesName,
-      groupEntry,
-      tournamentDescription,
-    } = req.body;
-    const tournamentPict = req.file.path;
-    const user: any = await UserProfile.findOne({ _userId: req._id });
-    const open: number = new Date(tournamentOpen).valueOf();
-    const start: number = new Date(tournamentStart).valueOf();
-    const close: number = new Date(tournamentClose).valueOf();
-    const now: number = Date.now().valueOf();
-    const rulesCheck: any = await TournamentRules.findOne({
-      rulesName,
-    });
-    const tournament = await Tournament.findOne({
-      tournamentName,
-    });
-    const tournamentNames: any = await Tournament.findOne({
-      tournamentName,
-      _tournamentRulesId: tournament?._tournamentRulesId,
-    });
+    try {
+      const {
+        tournamentName,
+        tournamentOpen,
+        tournamentStart,
+        tournamentClose,
+        tournamentType,
+        rulesName,
+        groupEntry,
+        tournamentDescription,
+      } = req.body;
+      const tournamentPict = req.file.path;
+      const user: any = await UserProfile.findOne({ _userId: req._id });
+      const open: number = new Date(tournamentOpen).valueOf();
+      const start: number = new Date(tournamentStart).valueOf();
+      const close: number = new Date(tournamentClose).valueOf();
+      const now: number = Date.now().valueOf();
+      const rulesCheck: any = await TournamentRules.findOne({
+        rulesName,
+      });
+      const tournament = await Tournament.findOne({
+        tournamentName,
+      });
+      const tournamentNames: any = await Tournament.findOne({
+        tournamentName,
+        _tournamentRulesId: tournament?._tournamentRulesId,
+      });
 
-    if (rulesCheck?.subdistrict == user?.subDistrict) {
-      if (tournamentNames && rulesCheck) {
-        next({ name: "TOURNAMENT_EXIST" });
-      } else {
-        if (!rulesCheck) {
-          next({ name: "RULES_NOT_FOUND" });
-        } else {
-          if (close > start && start > open && open > now) {
-            const tournament = await new Tournament({
-              tournamentName,
-              tournamentOpen,
-              tournamentStart,
-              tournamentClose,
-              tournamentType,
-              _tournamentRulesId: rulesCheck?._id,
-              groupEntry,
-              tournamentPict,
-              subDistrict: rulesCheck?.subdistrict,
-              tournamentDescription,
-            });
-            tournament.save();
-            const tournamentReport = new TournamentReport({
-              _tournamentId: tournament._id,
-            });
-
-            tournamentReport.save();
-
-            res.status(201).json({
-              success: true,
-              message: `${tournamentName} tournament has successfully created`,
-            });
-
-            next();
+      if (groupEntry === "true" || groupEntry === "false") {
+        if (rulesCheck?.subdistrict == user?.subDistrict) {
+          if (tournamentNames && rulesCheck) {
+            next({ name: "TOURNAMENT_EXIST" });
           } else {
-            next({ name: "TIME_ERR" });
+            if (!rulesCheck) {
+              next({ name: "RULES_NOT_FOUND" });
+            } else {
+              if (close > start && start > open && open > now) {
+                const tournament = await new Tournament({
+                  tournamentName,
+                  tournamentOpen,
+                  tournamentStart,
+                  tournamentClose,
+                  tournamentType,
+                  _tournamentRulesId: rulesCheck?._id,
+                  groupEntry,
+                  tournamentPict,
+                  subDistrict: rulesCheck?.subdistrict,
+                  tournamentDescription,
+                });
+                tournament.save();
+                const tournamentReport = new TournamentReport({
+                  _tournamentId: tournament._id,
+                });
+
+                tournamentReport.save();
+
+                res.status(201).json({
+                  success: true,
+                  message: `${tournamentName} tournament has successfully created`,
+                });
+
+                next();
+              } else {
+                next({ name: "TIME_ERR" });
+              }
+            }
           }
+        } else {
+          next({ name: "NOT_AUTHORIZE" });
         }
+      } else {
+        next({ name: "WRONG_FORMAT" });
       }
-    } else {
-      next({ name: "NOT_AUTHORIZE" });
+    } catch {
+      next({ name: "FIELD_BLANK" });
     }
   }
 
