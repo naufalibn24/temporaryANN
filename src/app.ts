@@ -16,7 +16,7 @@ var corsOptions = {
 };
 
 app.get("", (req, res) => {
-  res.send("<h1>Welcome to your simple server! Awesome right</h1>");
+  res.send("<h1>Welcome to ANN server! Awesome right</h1>");
 });
 app.use(cors(corsOptions));
 app.use("/images", express.static("images"));
