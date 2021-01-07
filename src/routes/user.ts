@@ -23,7 +23,8 @@ router.post(
   // userController.forgotPassword,
   userController.resetPassword
 );
-router.get("/tournaments", userController.seeTournamentList);
+// router.get("/tournaments", userController.seeTournamentList);
+router.get("/tournaments", userController.tournamentListPlain);
 router.get("/tournamentopen", userController.tournamentAvailable);
 router.get("/tournamentdetail/:id", userController.seeTournamentDetail);
 router.get("/FFA/:id", userController.seeFFA);

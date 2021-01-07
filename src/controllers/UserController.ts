@@ -307,6 +307,11 @@ class UserController {
     }
   }
 
+  static async tournamentListPlain(req, res, next) {
+    const list = await Tournament.find();
+    res.status(201).json({ list });
+  }
+
   static async seeTournamentDetail(req, res, next) {
     const { id } = req.params;
     const tournament = await Tournament.findById(id);
