@@ -440,10 +440,9 @@ class CommitteeController {
       const participant: any = await TournamentReport.findOne({
         _tournamentId: tournament._id,
       });
-      const shuffled: any = shuffle(participant.participant);
 
-      // console.log(tournament);
-      // console.log(participant);
+      // const shuffled: any = shuffle(participant.participant);
+
       if (
         tournament.stageName === participant.stageName &&
         tournament.tournamentType == "freeforall"
@@ -451,7 +450,7 @@ class CommitteeController {
         const stageName: number = (await participant.stageName) + 1;
         const tournamentReport = new TournamentReport({
           _tournamentId: participant._tournamentId,
-          participant: shuffled,
+          participant: participant.participant,
           stageName,
         });
 
@@ -835,12 +834,6 @@ class CommitteeController {
     } else {
       console.log("belom bikin");
     }
-
-    // if (profile != null) {
-
-    // } else {
-    //   next({ name: "NOT_FOUND" });
-    // }
   }
 
   static async finishingStage(req, res, next) {
