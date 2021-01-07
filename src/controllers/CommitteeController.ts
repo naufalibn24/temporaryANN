@@ -480,6 +480,7 @@ class CommitteeController {
 
         res.status(201).json({
           last,
+          update,
           // participants,
         });
       } else {
@@ -793,46 +794,56 @@ class CommitteeController {
   }
 
   static async putScore(req, res, next) {
-    const { _userId, _id, score } = req.body;
-    const tournament: any = await Tournament.findById(_id);
+    try {
+      const { _userId, _id, Score } = req.body;
+      const tournament: any = await Tournament.findById(_id);
+      const score: number = parseInt(Score);
 
-    const profile: any = await TournamentReport.findOne({
-      _tournamentId: tournament._id,
-      participant: { $elemMatch: { _userId } },
-    });
+      const name: any = await TournamentReport.findOne({});
+      const profiles: any = await Profile.findOne({ _userId });
 
-    const profileFFA: any = await TournamentReport.findOne({
-      _tournamentId: tournament._id,
-      stageName: 1,
-      participant: { $elemMatch: { _userId } },
-    });
+      // console.log(profiles);
 
-    if (tournament.tournamentType == "freeforall") {
-      if (profileFFA != null) {
-        const put: any = await TournamentReport.findOneAndUpdate(
-          {
-            _tournamentId: tournament._id,
-            stageName: 1,
-            participant: { $elemMatch: { _userId } },
-          },
-          {
-            $set: {
-              "participant.$.score": score,
+      const profile: any = await TournamentReport.findOne({
+        _tournamentId: tournament._id,
+        participant: { $elemMatch: { _userId } },
+      });
+
+      const profileFFA: any = await TournamentReport.findOne({
+        _tournamentId: tournament._id,
+        stageName: 1,
+        participant: { $elemMatch: { _userId } },
+      });
+
+      if (tournament.tournamentType == "freeforall") {
+        if (profileFFA != null) {
+          const put: any = await TournamentReport.findOneAndUpdate(
+            {
+              _tournamentId: tournament._id,
+              stageName: 1,
+              participant: { $elemMatch: { _userId } },
             },
-          },
-          { new: true, upsert: true }
-        );
+            {
+              $set: {
+                "participant.$.score": score,
+              },
+            },
+            { new: true, upsert: true }
+          );
 
-        res.status(201).json({
-          success: true,
-          message: `${_userId} got ${score} on stage${put.stageName}`,
-          score,
-        });
+          res.status(201).json({
+            success: true,
+            message: `${profiles.fullname} got ${score} on stage${put.stageName}`,
+            score,
+          });
+        } else {
+          next({ name: "NOT_FOUND" });
+        }
       } else {
         next({ name: "NOT_FOUND" });
       }
-    } else {
-      console.log("belom bikin");
+    } catch {
+      next({ name: "FIELD_BLANK" });
     }
   }
 

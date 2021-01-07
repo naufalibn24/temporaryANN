@@ -352,10 +352,12 @@ class UserController {
         if (table.stageName == 0) {
           res.status(201).json({
             report,
+            table,
           });
         } else {
           res.status(201).json({
             reportADV,
+            table,
           });
         }
       } else {
