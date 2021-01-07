@@ -12,7 +12,7 @@ mongooseconnect();
 
 var corsOptions = {
   // origin: "http://localhost:4200",
-  origin: "https://revision-ass4-git-main.muhidabdul168.vercel.app/",
+  origin: "https://revision-ass4-git-main.muhidabdul168.vercel.app",
   credentials: true,
 };
 
