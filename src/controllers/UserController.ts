@@ -405,7 +405,7 @@ class UserController {
       finished: true,
       tournamentType: "freeforall",
     });
-    // console.log(FFA);
+
     const BRANCHES: any = await Tournament.find({
       finished: true,
       tournamentType: "branches",
@@ -439,14 +439,12 @@ class UserController {
         if (err) {
           console.error(err);
         }
-        // console.log(result[0].participant);
         let tempArr: any[] = [];
         for (let i = 0; i < result.length; i += 2) {
           tempArr.push(result[i].participant);
         }
         let sliced: any = tempArr.slice(0, 3);
-        // console.log(tempArr.slice(0, 3));
-        res.status(200).json({ sliced });
+        res.status(200).json({ sliced, FFA });
       });
     } else {
       next({ name: "NO_WINNER" });
