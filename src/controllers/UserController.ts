@@ -368,12 +368,44 @@ class UserController {
     }
   }
 
+  // static async seeHallOfFame(req, res, next) {
+  //   const tournament: any = await Tournament.find({ finished: true });
+  //   const report: any = await TournamentReport.findOne({
+  //     _tournamentId: tournament._id,
+  //   });
+  //   let sorted: any;
+  //   let tempArr: any;
+  //   for (let i = 0; i < tournament.length; i++) {
+  //     const report: any = await TournamentReport.findOne({
+  //       _tournamentId: tournament[i]._id,
+  //       stageName: 2,
+  //     });
+  //     tempArr = report.participant;
+  //     let tempScore: any[] = [];
+  //     for (let x in tempArr) {
+  //       tempScore.push(tempArr[x].score);
+  //       sorted = tempScore.sort((a, b) => b - a);
+  //       const find: any = await TournamentReport.findOne({
+  //         participant: { $elemMatch: { $in: 94, $exists: true } },
+  //       });
+  //       console.log(find);
+  //     }
+  //   }
+  // console.log(sorted);
+  // for(let i=0;i<tempArr.participant.length;i++){
+
+  // }
+  // console.log(tempArr.length);
+  // console.log(tempArr);
+  // res.status(201).json({ tempArr });
+  // }
+
   static async seeHallOfFame(req, res, next) {
     const FFA: any = await Tournament.find({
       finished: true,
       tournamentType: "freeforall",
     });
-    console.log(FFA);
+    // console.log(FFA);
     const BRANCHES: any = await Tournament.find({
       finished: true,
       tournamentType: "branches",
@@ -407,7 +439,14 @@ class UserController {
         if (err) {
           console.error(err);
         }
-        res.status(200).send(result);
+        // console.log(result[0].participant);
+        let tempArr: any[] = [];
+        for (let i = 0; i < result.length; i += 2) {
+          tempArr.push(result[i].participant);
+        }
+        let sliced: any = tempArr.slice(0, 3);
+        // console.log(tempArr.slice(0, 3));
+        res.status(200).json({ sliced });
       });
     } else {
       next({ name: "NO_WINNER" });

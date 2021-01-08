@@ -455,15 +455,11 @@ class CommitteeController {
         });
 
         tournamentReport.save();
+
         const update: any = await Tournament.findByIdAndUpdate(
           participant._tournamentId,
           { $set: { stageName: tournamentReport.stageName } }
         );
-
-        // res.status(201).json({
-        //   success: true,
-        //   message: `${update.tournamentName} has been moving to next stage`,
-        // });
 
         const last: any = await TournamentReport.findOne({
           $and: [{ _tournamentId: tournament._id }, { stageName }],
@@ -479,6 +475,8 @@ class CommitteeController {
         // }
 
         res.status(201).json({
+          success: true,
+          message: `${update.tournamentName} has started`,
           last,
           update,
           // participants,
@@ -487,7 +485,7 @@ class CommitteeController {
         next({ name: "STAGE_ERROR" });
       }
     } catch {
-      console.log("err");
+      next({ name: "FIELD_BLANK" });
     }
   }
 
@@ -499,8 +497,8 @@ class CommitteeController {
         $and: [{ _tournamentId: tournament._id }, { stageName: 1 }],
       });
 
-      console.log(tournament);
-      console.log(participant);
+      // console.log(tournament);
+      // console.log(participant);
       if (
         tournament.stageName === participant.stageName &&
         participant.stageName === 1
@@ -526,7 +524,7 @@ class CommitteeController {
         next({ name: "STAGE_ERROR" });
       }
     } catch {
-      console.log("err");
+      next({ name: "FIELD_BLANK" });
     }
   }
 

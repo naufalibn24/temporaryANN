@@ -1,12 +1,12 @@
 ### test
 PUT http://localhost:5000/comittee/putScore
 Content-Type: application/json
-access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQwYjAyOTFhZDAyYzQyNTA0NGM2NTkiLCJyb2xlIjoiY29taXR0ZWUiLCJpYXQiOjE2MDk5OTg1NTR9.cpmBuXm4kZjnPZUK9L0hPCE0EZGNR4F7iDiH8aJ7-mk
+access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQwYjAyOTFhZDAyYzQyNTA0NGM2NTkiLCJyb2xlIjoiY29taXR0ZWUiLCJpYXQiOjE2MDk5OTQwNzR9.fZksQY7hgEs2KD--0M4jT4DCH8G3dCOejjebLMgfYxc
 
 {
     "_id":"5fd3abe80db961494422a610",
     "_userId":"5ff37e70d8e41e560c673ff4",
-    "Score":72
+    "Score":74
 }
 
 
