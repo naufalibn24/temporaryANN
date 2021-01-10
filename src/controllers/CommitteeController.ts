@@ -434,8 +434,8 @@ class CommitteeController {
   // }
 
   static async proceedFFA(req, res, next) {
-    const { _id } = req.body;
     try {
+      const { _id } = req.body;
       const tournament: any = await Tournament.findById(_id);
       const participant: any = await TournamentReport.findOne({
         _tournamentId: tournament._id,
