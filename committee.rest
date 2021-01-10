@@ -46,6 +46,16 @@ access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQ0NzJkYTVmNzQ1M
 
 
 
+### see FFA
+GET http://localhost:5000/getFFA
+Content-Type: application/json
+
+
+### see branches
+GET http://localhost:5000/getBranches
+Content-Type: application/json
+
+
 
 
 

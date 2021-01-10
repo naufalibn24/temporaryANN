@@ -308,8 +308,12 @@ class UserController {
   }
 
   static async tournamentListPlain(req, res, next) {
-    const list = await Tournament.find();
-    res.status(201).json({ list });
+    try {
+      const list = await Tournament.find();
+      res.status(201).json({ list });
+    } catch {
+      next({ name: "TOURNAMENTTYPE_NOT_RECOGNIZE" });
+    }
   }
 
   static async seeTournamentDetail(req, res, next) {
@@ -451,6 +455,22 @@ class UserController {
     }
     if (BRANCHES) {
     }
+  }
+
+  static async getFFA(req, res, next) {
+    const FFA = await Tournament.find({ tournamentType: "freeforall" });
+    res.status(201).json({
+      success: true,
+      FFA,
+    });
+  }
+
+  static async getBranches(req, res, next) {
+    const branches = await Tournament.find({ tournamentType: "branches" });
+    res.status(201).json({
+      success: true,
+      branches,
+    });
   }
 
   static async tester(req, res, next) {
