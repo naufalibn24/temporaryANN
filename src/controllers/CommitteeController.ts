@@ -529,9 +529,9 @@ class CommitteeController {
   }
 
   static async proceedBranches(req, res, next) {
-    const { _id } = req.body;
-
     try {
+      const { _id } = req.body;
+
       const Stage: any = await Tournament.findById(_id);
       const Check: any = await TournamentReport.findOne({
         _tournamentId: Stage._id,
