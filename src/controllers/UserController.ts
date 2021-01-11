@@ -379,7 +379,7 @@ class UserController {
       const Check: any = await TournamentReport.findOne({
         _tournamentId: Stage._id,
       });
-      console.log(Check);
+
       const participantNumber: number = Check.participant.length;
 
       const participantList: any[] = [];
@@ -389,7 +389,7 @@ class UserController {
         });
         participantList.push(profiles);
       }
-      console.log(participantList);
+
       const participants: any[] = Check.participant;
       let match: number = await Math.ceil(participantNumber / 2);
 
@@ -434,15 +434,23 @@ class UserController {
             participantList[matches + i].fullname
           );
         }
-
+        // console.log(tempTeams);
         teams.push(tempTeams);
         tempTeams = [];
+      }
+
+      let Teams: any;
+      for (let z in teams) {
+        console.log(teams[z]);
+        Teams = teams[z];
       }
 
       return res.status(201).json({
         teams,
         result: [],
       });
+
+      // return res.status(201).json(participants);
     } catch {
       next({ name: "TOURNAMENT_NOT_FOUND" });
     }

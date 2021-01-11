@@ -552,6 +552,7 @@ class CommitteeController {
             if (Stage.tournamentType == "branches") {
               if (Check.stageName == 0) {
                 const participantNumber: number = Check.participant.length;
+
                 const participantList: any[] = [];
                 for (let i = 0; i < participantNumber; i++) {
                   const profiles: any = await Profile.findOne({
