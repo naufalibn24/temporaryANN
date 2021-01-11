@@ -372,6 +372,82 @@ class UserController {
     }
   }
 
+  static async seeBranch(req, res, next) {
+    try {
+      const { id } = req.params;
+      const Stage: any = await Tournament.findById(id);
+      const Check: any = await TournamentReport.findOne({
+        _tournamentId: Stage._id,
+      });
+      console.log(Check);
+      const participantNumber: number = Check.participant.length;
+
+      const participantList: any[] = [];
+      for (let i = 0; i < participantNumber; i++) {
+        const profiles: any = await UserProfile.findOne({
+          _userId: Check.participant[i]._userId,
+        });
+        participantList.push(profiles);
+      }
+      console.log(participantList);
+      const participants: any[] = Check.participant;
+      let match: number = await Math.ceil(participantNumber / 2);
+
+      function countMatch(match) {
+        if (match === 1) {
+          next({ name: "TOURNAMENT_ABOLISH" });
+        } else if (
+          match === 2 ||
+          match === 4 ||
+          match === 8 ||
+          match === 16 ||
+          match === 32 ||
+          match === 64
+        ) {
+          return match;
+        } else if (2 <= match && match < 4) {
+          return 4;
+        } else if (4 < match && match < 8) {
+          return 8;
+        } else if (8 < match && match < 16) {
+          return 16;
+        } else if (16 < match && match < 32) {
+          return 32;
+        } else if (32 < match && match < 64) {
+          return 64;
+        } else if (64 < match) {
+          next({ name: "TOURNAMENT_ABOLISH" });
+        }
+      }
+      let matches: number = countMatch(match);
+
+      let teams: any[] = [];
+      let tempTeams: any[] = [];
+
+      for (var i = 0; i < matches; i++) {
+        const Check = typeof participantList[matches + i];
+        if (Check == "undefined") {
+          tempTeams.push(participantList[i].fullname, null);
+        } else {
+          tempTeams.push(
+            participantList[i].fullname,
+            participantList[matches + i].fullname
+          );
+        }
+
+        teams.push(tempTeams);
+        tempTeams = [];
+      }
+
+      return res.status(201).json({
+        teams,
+        result: [],
+      });
+    } catch {
+      next({ name: "TOURNAMENT_NOT_FOUND" });
+    }
+  }
+
   // static async seeHallOfFame(req, res, next) {
   //   const tournament: any = await Tournament.find({ finished: true });
   //   const report: any = await TournamentReport.findOne({

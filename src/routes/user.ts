@@ -28,6 +28,7 @@ router.get("/tournaments", userController.tournamentListPlain);
 router.get("/tournamentopen", userController.tournamentAvailable);
 router.get("/tournamentdetail/:id", userController.seeTournamentDetail);
 router.get("/FFA/:id", userController.seeFFA);
+router.get("/Branches/:id", userController.seeBranch);
 // router.get("/FFA/:id", userController.seeFFA);
 
 router.post("/tester", upload.single("pic"), userController.tester);
