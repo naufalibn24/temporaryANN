@@ -605,11 +605,9 @@ class CommitteeController {
                       participantList[matches + i].fullname
                     );
                   }
-
                   teams.push(tempTeams);
                   tempTeams = [];
                 }
-
                 return res.status(201).json({
                   teams,
                   result: [],
