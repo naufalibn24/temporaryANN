@@ -22,7 +22,7 @@ access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQwYjAyOTFhZDAyY
 
 # FREE FOR ALL ================================================================
 
-### SEE FFA
+### SEE HOF
 GET http://localhost:5000/halloffame
 Content-Type: application/json
 
@@ -66,36 +66,46 @@ access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQwYjAyOTFhZDAyY
 
 # ================================================================ BRANCHES
 
+
+### SEE branch
+GET http://localhost:5000/user/Branches/5ffa0b4d0a2637656c14e016
+Content-Type: application/json
+
+
 ### PROCEED BRANCHES
 PUT http://localhost:5000/comittee/startBranches
 Content-Type: application/json
 access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQwYjAyOTFhZDAyYzQyNTA0NGM2NTkiLCJyb2xlIjoiY29taXR0ZWUiLCJpYXQiOjE2MDk2MTY3MjV9.CXhWmAzHGSnQ7b39Tx-PZbGcRAFiVWmpg-ElUpRCyO8
 
 {
-    "_id":"5fd3abe80db961494422a610"
+    "_id":"5ffa0b4d0a2637656c14e016"
 }
 
 
-### PUT SCORE participant per person
-PUT http://localhost:5000/comittee/putScore
+### PUT SCORE branches
+PUT http://localhost:5000/comittee/putBranchScore
 Content-Type: application/json
 access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQwYjAyOTFhZDAyYzQyNTA0NGM2NTkiLCJyb2xlIjoiY29taXR0ZWUiLCJpYXQiOjE2MDk2MTY3MjV9.CXhWmAzHGSnQ7b39Tx-PZbGcRAFiVWmpg-ElUpRCyO8
 
 {
-    "_id":"5fd3abe80db961494422a610",
-    "_userId":"5fd65947d95e6f444c0148ff",
-    "score":"26"
+    "_id":"5ffa0b4d0a2637656c14e016",
+    "score1":0,
+    "score2":1
 }
 
 
 
 ### FINISH BRANCHES
-PUT http://localhost:5000/comittee/endFreeForAll
+PUT http://localhost:5000/comittee/finishBranches
 Content-Type: application/json
 access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQwYjAyOTFhZDAyYzQyNTA0NGM2NTkiLCJyb2xlIjoiY29taXR0ZWUiLCJpYXQiOjE2MDk2MTY3MjV9.CXhWmAzHGSnQ7b39Tx-PZbGcRAFiVWmpg-ElUpRCyO8
 
 {
-    "_id":"5fd3abe80db961494422a610"
+    "_id":"5ffa0b4d0a2637656c14e016",
+    "first":"idionsyncratic",
+    "second":"notorious UK",
+    "third":"kelantanman",
+    "fourth":"si gemuk"
 }
 
 

@@ -66,9 +66,21 @@ router.put(
 router.put("/putScore", authorization.comittee, CommitteeController.putScore);
 
 router.put(
+  "/putBranchScore",
+  authorization.comittee,
+  CommitteeController.putBranchScore
+);
+
+router.put(
   "/startBranches",
   authorization.comittee,
   CommitteeController.proceedBranches
+);
+
+router.put(
+  "/finishBranches",
+  authorization.comittee,
+  CommitteeController.finishBranches
 );
 
 router.put(

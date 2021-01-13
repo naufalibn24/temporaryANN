@@ -7,10 +7,10 @@ import TournamentRules from "../models/TournamentRulesModel";
 import TournamentReport from "../models/TournamentReportModel";
 import TournamentStage from "../models/TournamentStageModel";
 import Group from "../models/GroupModel";
+import BranchesScoring from "../models/BranchesScoringModel";
 import Inbox from "../models/InboxModel";
 import moment from "moment";
 import errorHandling from "../middlewares/errorHandler";
-import { log } from "console";
 import Profile from "../models/User_ProfileModel";
 
 class CommitteeController {
@@ -537,30 +537,30 @@ class CommitteeController {
         _tournamentId: Stage._id,
       });
 
-      const Shuffled: any = await shuffle(Check.participant);
-      // const scored: any = await TournamentReport.findOne({
-      //   _id,
-      //   participant: { $elemMatch: { score: null } },
-      // });
-
-      // console.log(Shuffled);
-      // console.log(scored);
+      const branchesStage: any = await BranchesScoring.findOne({
+        _tournamentId: Stage._id,
+      });
 
       if (Check && Stage) {
         if (Stage.finished == false) {
           if (Stage.stageName == Check.stageName) {
             if (Stage.tournamentType == "branches") {
-              if (Check.stageName == 0) {
+              if (branchesStage === null || undefined) {
                 const participantNumber: number = Check.participant.length;
 
+                function getBaseLog(length) {
+                  return Math.log(length) / Math.log(2);
+                }
+
+                var stages: number = Math.ceil(getBaseLog(participantNumber));
                 const participantList: any[] = [];
                 for (let i = 0; i < participantNumber; i++) {
-                  const profiles: any = await Profile.findOne({
+                  const profiles: any = await UserProfile.findOne({
                     _userId: Check.participant[i]._userId,
                   });
                   participantList.push(profiles);
                 }
-                console.log(participantList);
+
                 const participants: any[] = Check.participant;
                 let match: number = await Math.ceil(participantNumber / 2);
 
@@ -594,9 +594,11 @@ class CommitteeController {
 
                 let teams: any[] = [];
                 let tempTeams: any[] = [];
+                let tempScore: any[] = [];
 
                 for (var i = 0; i < matches; i++) {
                   const Check = typeof participantList[matches + i];
+
                   if (Check == "undefined") {
                     tempTeams.push(participantList[i].fullname, null);
                   } else {
@@ -605,12 +607,31 @@ class CommitteeController {
                       participantList[matches + i].fullname
                     );
                   }
+
+                  tempScore.push([null, null]);
                   teams.push(tempTeams);
                   tempTeams = [];
                 }
-                return res.status(201).json({
+
+                let results = new Array(stages).fill(tempScore);
+                const stageName = Check.stageName + 1;
+
+                const branchesScoring = await new BranchesScoring({
+                  _tournamentId: _id,
+                  stageName,
                   teams,
-                  result: [],
+                  results,
+                });
+
+                branchesScoring.save();
+
+                await Tournament.findByIdAndUpdate(Check._tournamentId, {
+                  $set: { stageName },
+                });
+
+                return res.status(201).json({
+                  success: true,
+                  branchesScoring,
                 });
               } else {
                 next({ name: "STAGE_ERROR" });
@@ -629,6 +650,59 @@ class CommitteeController {
       }
     } catch {
       console.log("err");
+    }
+  }
+
+  static async finishBranches(req, res, next) {
+    const { _id, first, second, third, fourth } = req.body;
+
+    const Stage: any = await Tournament.findById(_id);
+    const Check: any = await TournamentReport.findOne({
+      _tournamentId: Stage._id,
+    });
+
+    const branchesStage: any = await BranchesScoring.findOne({
+      _tournamentId: Stage._id,
+    });
+
+    if (
+      (first != null || undefined) &&
+      (second != null || undefined) &&
+      (third != null || undefined) &&
+      (fourth != null || undefined)
+    ) {
+      if (branchesStage) {
+        if (Stage.finished === false) {
+          if (Stage.stageName == branchesStage.stageName) {
+            const stageName = Stage.stageName + 1;
+            const teams: any[] = [first, second, third, fourth];
+            const branchesScoring = await new BranchesScoring({
+              _tournamentId: _id,
+              stageName,
+              teams,
+            });
+
+            branchesScoring.save();
+
+            await Tournament.findByIdAndUpdate(Check._tournamentId, {
+              $set: { stageName, finished: true },
+            });
+
+            res.status(201).json({
+              success: true,
+              branchesScoring,
+            });
+          } else {
+            next({ name: "STAGE_ERROR" });
+          }
+        } else {
+          next({ name: "ALREADY_HAVE_WINNER" });
+        }
+      } else {
+        next({ name: "STAGE_ERROR" });
+      }
+    } else {
+      next({ name: "FIELD_BLANK" });
     }
   }
 
@@ -841,6 +915,61 @@ class CommitteeController {
       }
     } catch {
       next({ name: "FIELD_BLANK" });
+    }
+  }
+
+  static async putBranchScore(req, res, next) {
+    const { _id, score1, score2 } = req.body;
+    const tournament: any = await Tournament.findById(_id);
+    const report: any = await BranchesScoring.findOne({
+      _tournamentId: tournament._id,
+      stageName: tournament.stageName,
+    });
+
+    const Check: any = await TournamentReport.findOne({
+      _tournamentId: _id,
+      stageName: 0,
+    });
+
+    const Score1: number = parseInt(score1);
+    const Score2: number = parseInt(score2);
+
+    const participantNumber: number = Check.participant.length;
+
+    function getBaseLog(length) {
+      return Math.log(length) / Math.log(2);
+    }
+
+    var stages: number = Math.ceil(getBaseLog(participantNumber));
+
+    const Results: any = [
+      [Score1, Score2],
+      [Score2, Score1],
+      [Score1, Score2],
+      [Score2, Score1],
+      [Score1, Score2],
+      [Score2, Score1],
+      [Score1, Score2],
+      [Score2, Score1],
+    ];
+    const results = new Array(stages).fill(Results);
+    if (score1 != score2) {
+      if (tournament.finished == false) {
+        const Result: any = await BranchesScoring.findByIdAndUpdate(
+          report._id,
+          {
+            $set: { results },
+          }
+        );
+
+        res.status(201).json({
+          Result,
+        });
+      } else {
+        next({ name: "ALREADY_HAVE_WINNER" });
+      }
+    } else {
+      next({ name: "WRONG_SCORE" });
     }
   }
 

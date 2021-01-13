@@ -98,6 +98,10 @@ const errorHandling = (err, req, res, next) => {
       code = 400;
       message = "You have enter wrong format, please recheck";
       break;
+    case "WRONG_SCORE":
+      code = 400;
+      message = "You can't assign same value of score";
+      break;
     case "MONGOOSE_ERROR":
       code = 500;
       message = "mongoose error";

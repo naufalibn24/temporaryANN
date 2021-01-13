@@ -8,6 +8,7 @@ import Tournament from "../models/TournamentModel";
 import TournamentRules from "../models/TournamentRulesModel";
 import ItournamentRules from "../models/interfaces/TournamentRulesInterface";
 import TournamentReport from "../models/TournamentReportModel";
+import BranchesScoring from "../models/BranchesScoringModel";
 
 require("dotenv").config();
 
@@ -376,117 +377,98 @@ class UserController {
     try {
       const { id } = req.params;
       const Stage: any = await Tournament.findById(id);
+      const Check2: any = await BranchesScoring.findOne({
+        _tournamentId: Stage._id,
+        stageName: 1,
+      });
       const Check: any = await TournamentReport.findOne({
         _tournamentId: Stage._id,
       });
 
-      const participantNumber: number = Check.participant.length;
+      if (Stage.stageName == 0) {
+        const participantNumber: number = Check.participant.length;
 
-      const participantList: any[] = [];
-      for (let i = 0; i < participantNumber; i++) {
-        const profiles: any = await UserProfile.findOne({
-          _userId: Check.participant[i]._userId,
+        function getBaseLog(length) {
+          return Math.log(length) / Math.log(2);
+        }
+
+        var stages: number = Math.ceil(getBaseLog(participantNumber));
+        const participantList: any[] = [];
+        for (let i = 0; i < participantNumber; i++) {
+          const profiles: any = await UserProfile.findOne({
+            _userId: Check.participant[i]._userId,
+          });
+          participantList.push(profiles);
+        }
+
+        const participants: any[] = Check.participant;
+        let match: number = await Math.ceil(participantNumber / 2);
+
+        function countMatch(match) {
+          if (match === 1) {
+            next({ name: "TOURNAMENT_ABOLISH" });
+          } else if (
+            match === 2 ||
+            match === 4 ||
+            match === 8 ||
+            match === 16 ||
+            match === 32 ||
+            match === 64
+          ) {
+            return match;
+          } else if (2 <= match && match < 4) {
+            return 4;
+          } else if (4 < match && match < 8) {
+            return 8;
+          } else if (8 < match && match < 16) {
+            return 16;
+          } else if (16 < match && match < 32) {
+            return 32;
+          } else if (32 < match && match < 64) {
+            return 64;
+          } else if (64 < match) {
+            next({ name: "TOURNAMENT_ABOLISH" });
+          }
+        }
+        let matches: number = countMatch(match);
+
+        let teams: any[] = [];
+        let tempTeams: any[] = [];
+        let tempScore: any[] = [];
+
+        for (var i = 0; i < matches; i++) {
+          const Check = typeof participantList[matches + i];
+
+          if (Check == "undefined") {
+            tempTeams.push(participantList[i].fullname, null);
+          } else {
+            tempTeams.push(
+              participantList[i].fullname,
+              participantList[matches + i].fullname
+            );
+          }
+
+          tempScore.push([null, null]);
+          teams.push(tempTeams);
+          tempTeams = [];
+        }
+        console.log(Check.teams);
+        return res.status(201).json({
+          teams,
         });
-        participantList.push(profiles);
+      } else {
+        const teams: any = Check2.teams;
+        const results: any = Check2.results;
+
+        return res.status(201).json({
+          teams,
+          results,
+        });
       }
-
-      const participants: any[] = Check.participant;
-      let match: number = await Math.ceil(participantNumber / 2);
-
-      function countMatch(match) {
-        if (match === 1) {
-          next({ name: "TOURNAMENT_ABOLISH" });
-        } else if (
-          match === 2 ||
-          match === 4 ||
-          match === 8 ||
-          match === 16 ||
-          match === 32 ||
-          match === 64
-        ) {
-          return match;
-        } else if (2 <= match && match < 4) {
-          return 4;
-        } else if (4 < match && match < 8) {
-          return 8;
-        } else if (8 < match && match < 16) {
-          return 16;
-        } else if (16 < match && match < 32) {
-          return 32;
-        } else if (32 < match && match < 64) {
-          return 64;
-        } else if (64 < match) {
-          next({ name: "TOURNAMENT_ABOLISH" });
-        }
-      }
-      let matches: number = countMatch(match);
-
-      let teams: any[] = [];
-      let tempTeams: any[] = [];
-
-      for (var i = 0; i < matches; i++) {
-        const Check = typeof participantList[matches + i];
-        if (Check == "undefined") {
-          tempTeams.push(participantList[i].fullname, null);
-        } else {
-          tempTeams.push(
-            participantList[i].fullname,
-            participantList[matches + i].fullname
-          );
-        }
-        // console.log(tempTeams);
-        teams.push(tempTeams);
-        tempTeams = [];
-      }
-
-      let Teams: any;
-      for (let z in teams) {
-        console.log(teams[z]);
-        Teams = teams[z];
-      }
-
-      return res.status(201).json({
-        teams,
-        result: [],
-      });
-
-      // return res.status(201).json(participants);
     } catch {
       next({ name: "TOURNAMENT_NOT_FOUND" });
     }
   }
-
-  // static async seeHallOfFame(req, res, next) {
-  //   const tournament: any = await Tournament.find({ finished: true });
-  //   const report: any = await TournamentReport.findOne({
-  //     _tournamentId: tournament._id,
-  //   });
-  //   let sorted: any;
-  //   let tempArr: any;
-  //   for (let i = 0; i < tournament.length; i++) {
-  //     const report: any = await TournamentReport.findOne({
-  //       _tournamentId: tournament[i]._id,
-  //       stageName: 2,
-  //     });
-  //     tempArr = report.participant;
-  //     let tempScore: any[] = [];
-  //     for (let x in tempArr) {
-  //       tempScore.push(tempArr[x].score);
-  //       sorted = tempScore.sort((a, b) => b - a);
-  //       const find: any = await TournamentReport.findOne({
-  //         participant: { $elemMatch: { $in: 94, $exists: true } },
-  //       });
-  //       console.log(find);
-  //     }
-  //   }
-  // console.log(sorted);
-  // for(let i=0;i<tempArr.participant.length;i++){
-
-  // }
-  // console.log(tempArr.length);
-  // console.log(tempArr);
-  // res.status(201).json({ tempArr });
-  // }
 
   static async seeHallOfFame(req, res, next) {
     const FFA: any = await Tournament.find({
